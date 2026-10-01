@@ -91,7 +91,62 @@
 
             <!-- Screen Overlay / Menus -->
             <div id="menuOverlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center z-30 p-6 text-center">
-<!-- ... existing code -->
+                <h1 id="menuTitle" class="text-xl sm:text-3xl text-amber-400 glow-orange mb-3">KNIGHT'S DESCENT</h1>
+                <p id="menuSubtitle" class="text-slate-300 text-[10px] sm:text-xs mb-4 max-w-md">Descend into the inferno, brave knight. Slay the demons and face Khal'gorath!</p>
+                <div id="statsSummary" class="hidden mb-4 text-xs sm:text-sm text-slate-200 space-y-1">
+                    <p>SCORE: <span id="finalScore" class="text-yellow-300 font-bold">0</span></p>
+                    <p>TIME: <span id="finalTime" class="text-cyan-300 font-bold">0s</span></p>
+                </div>
+                <button id="startBtn" class="retro-btn px-6 py-3 text-amber-100 font-bold text-xs sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform mb-4">START GAME</button>
+                <div class="text-[8px] sm:text-[9px] text-slate-400 space-y-1">
+                    <p>[←→] MOVE · [SPACE] JUMP · [Z] / CLICK ATTACK</p>
+                    <p>[SHIFT] DASH · [J] SHIELD · [H] HEAL · [P] PAUSE</p>
+                </div>
+            </div>
+
+            <!-- Boss HP Bar -->
+            <div id="bossBarContainer" class="hidden absolute top-2 left-1/2 -translate-x-1/2 w-3/4 max-w-md z-20 text-center">
+                <p class="text-red-500 text-[9px] sm:text-xs font-bold glow-red mb-1">KHAL'GORATH, DEMON LORD</p>
+                <div class="w-full h-3 bg-slate-900 border-2 border-red-700 rounded overflow-hidden">
+                    <div id="bossHpBar" class="h-full bg-gradient-to-r from-red-600 to-orange-500" style="width:100%"></div>
+                </div>
+                <p id="bossHpText" class="text-red-300 text-[8px] sm:text-[9px] mt-1"></p>
+            </div>
+
+            <!-- Stage Banner -->
+            <div id="stageBanner" class="absolute top-1/3 right-0 z-20 bg-slate-900/95 border-y-2 border-l-2 border-amber-500 rounded-l px-4 py-3 text-right transform translate-x-full transition-transform duration-500">
+                <p id="stageBannerText" class="text-amber-400 text-xs sm:text-lg font-bold glow-orange"></p>
+                <p id="stageBannerSub" class="text-slate-300 text-[8px] sm:text-[10px]"></p>
+            </div>
+
+            <!-- Combo Text -->
+            <div class="absolute top-2 left-2 z-20 text-[9px] sm:text-xs">
+                <span id="comboText" class="text-amber-300 font-bold glow-orange"></span>
+            </div>
+
+            <!-- Touch Controls -->
+            <div class="absolute bottom-2 left-2 z-20 flex space-x-2 sm:hidden">
+                <button id="tLeft" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">◀</button>
+                <button id="tRight" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">▶</button>
+            </div>
+            <div class="absolute bottom-2 right-2 z-20 flex space-x-2 sm:hidden">
+                <button id="tJump" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">⤒</button>
+                <button id="tAtk" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">⚔</button>
+                <button id="tDash" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">»</button>
+                <button id="tShield" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">🛡</button>
+                <button id="tHeal" class="retro-btn px-3 py-2 text-amber-100 text-xs rounded">💚</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const shieldHudText = document.getElementById('shieldHudText');
+        const shieldCdContainer = document.getElementById('shieldCdContainer');
+        const shieldCdBar = document.getElementById('shieldCdBar');
+        const stageLabel = document.getElementById('stageLabel');
+        const scoreText = document.getElementById('scoreText');
         const bossBarContainer = document.getElementById('bossBarContainer');
         const bossHpBar = document.getElementById('bossHpBar');
         const bossHpText = document.getElementById('bossHpText');
