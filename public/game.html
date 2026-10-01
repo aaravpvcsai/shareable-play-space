@@ -61,7 +61,20 @@
             </div>
 
             <!-- Shield Indicator HUD -->
-<!-- ... existing code -->
+            <!-- Shield / Heal / Score / Stage HUD -->
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="flex flex-col items-start">
+                    <span id="shieldHudText" class="text-cyan-300 font-bold glow-cyan">🛡️ SHIELD: READY [J]</span>
+                    <div id="shieldCdContainer" class="hidden w-16 sm:w-20 h-1.5 bg-slate-800 rounded overflow-hidden mt-0.5">
+                        <div id="shieldCdBar" class="h-full bg-cyan-400" style="width:0%"></div>
+                    </div>
+                </div>
+                <span id="healReadyBadge" class="hidden text-emerald-400 font-bold glow-green">💚 HEAL READY [H]</span>
+                <span id="scoreText" class="text-yellow-300 font-bold">0</span>
+                <span id="stageLabel" class="text-amber-300 font-bold">STAGE 1: CITADEL</span>
+                <button id="muteBtn" class="bg-amber-900 hover:bg-amber-800 text-amber-200 border border-amber-500/80 px-2 py-1 text-[8px] sm:text-[9px] font-bold rounded cursor-pointer active:scale-95 transition-transform">🔊 MUSIC</button>
+            </div>
+        </div>
         <!-- Canvas Container -->
         <div class="relative w-full flex-1 my-1.5 flex items-center justify-center overflow-hidden border-2 border-amber-950 rounded bg-black">
             <canvas id="gameCanvas" class="w-full h-full object-contain cursor-crosshair"></canvas>
