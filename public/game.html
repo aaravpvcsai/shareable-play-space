@@ -1390,7 +1390,10 @@
                 }
             }
 
-            if (currentStage === 1 && player.x > 1180) {
+            // Demons that fall off the map count as defeated
+            enemies.forEach(e => { if (!e.dead && (e.y > V_HEIGHT + 20 || e.x < -100 || e.x > 1400)) e.dead = true; });
+
+            if (currentStage === 1 && player.x > 1150) {
                 const remainingEnemies = enemies.filter(e => !e.dead).length;
                 if (remainingEnemies === 0) {
                     triggerStageTransition(2);
