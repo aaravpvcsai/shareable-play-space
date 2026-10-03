@@ -51,11 +51,13 @@
         
         <!-- Top Pixel HUD Header -->
         <div class="w-full flex justify-between items-center z-10 text-[9px] sm:text-xs px-2 sm:px-3 py-2 bg-slate-900/90 rounded border-2 border-amber-600/40 gap-1">
-            <!-- Hearts HUD (0.5 Heart Precision) -->
-            <div class="flex items-center space-x-1 sm:space-x-2">
-                <span class="text-amber-400">HP:</span>
-                <div id="heartsContainer" class="flex space-x-1 text-sm sm:text-base items-center">
-                    <!-- Dynamic Hearts via JS -->
+            <div class="flex items-center space-x-2">
+                <button id="pauseBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] sm:text-[10px] text-amber-300 hover:bg-gray-700 rounded">⏸️ PAUSE [P]</button>
+                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <span class="text-amber-400">HP:</span>
+                    <div id="heartsContainer" class="flex space-x-1 text-sm sm:text-base items-center">
+                        <!-- Dynamic Hearts via JS -->
+                    </div>
                 </div>
             </div>
 
@@ -82,7 +84,6 @@
                     <span id="comboText" class="text-amber-300 font-bold glow-orange">COMBO: 0</span>
                     <span id="healReadyBadge" class="hidden text-[8px] text-green-400 font-bold animate-pulse block glow-green">[H] HEAL READY!</span>
                 </div>
-                <button id="pauseBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] text-amber-300 hover:bg-gray-700">⏸️ PAUSE [P]</button>
                 <button id="muteBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] text-amber-300 hover:bg-gray-700">🔊 MUSIC</button>
             </div>
         </div>
@@ -91,7 +92,7 @@
         <div id="bossBarContainer" class="hidden w-full bg-red-950/90 border-2 border-red-600 rounded p-1.5 z-10 my-1 text-center">
             <div class="flex justify-between items-center text-[9px] sm:text-xs text-red-400 font-bold mb-1 px-1">
                 <span class="glow-red">👹 DEMON LORD KHAL'GORATH</span>
-                <span id="bossHpText" class="text-amber-300">200 / 200 HP</span>
+                <span id="bossHpText" class="text-amber-300">300 / 300 HP</span>
             </div>
             <div class="w-full bg-black h-3 sm:h-4 border border-amber-500 relative overflow-hidden rounded">
                 <div id="bossHpBar" class="bg-gradient-to-r from-red-600 via-amber-500 to-yellow-400 h-full w-full transition-all duration-150"></div>
@@ -101,10 +102,10 @@
         <!-- Controls HUD Bar -->
         <div class="w-full bg-red-950/90 border-x-2 border-b-2 border-amber-500/80 text-[8px] sm:text-[10px] py-1.5 px-2.5 flex flex-wrap justify-between items-center text-amber-200 z-10 rounded-b shadow-md gap-y-1">
             <div class="flex items-center space-x-1.5 font-bold flex-wrap gap-y-1">
-                <span class="bg-red-600 text-white px-1.5 py-0.5 rounded border border-yellow-300">⚔️️ ATK: Z/X/Click</span>
+                <span class="bg-red-600 text-white px-1.5 py-0.5 rounded border border-yellow-300">⚔ ATK: Z/X/Click</span>
                 <span class="bg-cyan-600 text-white px-1.5 py-0.5 rounded border border-cyan-300">🛡️ SHIELD: J</span>
                 <span class="bg-emerald-600 text-white px-1.5 py-0.5 rounded border border-emerald-300 glow-green">💚 HEAL: H (5+ Combo)</span>
-                <span class="bg-slate-700 text-amber-300 px-1.5 py-0.5 rounded border border-amber-400">⏸️️ PAUSE: P / ESC</span>
+                <span class="bg-slate-700 text-amber-300 px-1.5 py-0.5 rounded border border-amber-400">⏸ PAUSE: P / ESC</span>
             </div>
             <div class="hidden md:flex items-center space-x-3 text-slate-200">
                 <span><strong class="text-amber-400">JUMP / DBL JUMP:</strong> Space x2 / W</span>
@@ -133,8 +134,8 @@
             <!-- Screen Overlay / Menus -->
             <div id="menuOverlay" class="absolute inset-0 bg-black/85 backdrop-blur-sm flex flex-col items-center justify-center z-30 p-6 text-center">
                 <h1 id="menuTitle" class="text-xl sm:text-3xl text-amber-500 glow-orange mb-3 leading-snug">KNIGHT'S DESCENT<br><span class="text-red-600 text-sm sm:text-2xl">INTO THE INFERNO</span></h1>
-                <p id="menuSubtitle" class="text-slate-300 text-[10px] sm:text-xs mb-5 max-w-lg leading-relaxed">
-                    Battle through demons, master 3 static lava parkour stages, and defeat the Demon Lord! Checkpoints save your progress at the start of each stage with 3 full hearts.
+                <p id="menuSubtitle" class="text-slate-300 text-[10px] sm:text-xs mb-4 max-w-lg leading-relaxed">
+                    Battle through demons and conquer 3 unique infernal stages: Crumbling Platforms & Meteors, Moving Lifts & Lava Geysers, and Fire Barrier Sprints!
                 </p>
 
                 <div id="statsSummary" class="hidden mb-4 text-xs space-y-2 text-amber-300">
@@ -147,13 +148,11 @@
                 </button>
 
                 <!-- Key Controls Guide -->
-                <div class="mt-5 text-[9px] sm:text-[11px] text-slate-300 bg-black/80 border border-amber-500/50 p-3 rounded-lg space-y-1.5 max-w-md text-left">
-                    <p class="text-red-400 font-bold"><span class="text-yellow-300">⚔️ ATTACK (20 DMG):</span> [Z], [X], or LEFT-CLICK (3 hits to kill basic demons)</p>
-                    <p class="text-cyan-300 font-bold"><span class="text-cyan-400">🛡️ SHIELD:</span> [J] (Stays active through 3 hits! 7s cooldown)</p>
-                    <p class="text-emerald-400 font-bold"><span class="text-emerald-300">💚 COMBO HEAL:</span> Reach 5+ Combo & press [H] to gain +0.5 Heart!</p>
-                    <p><span class="text-amber-400">DOUBLE JUMP:</span> Press [SPACE] once to jump, [SPACE] again in air!</p>
-                    <p><span class="text-blue-400">DASH:</span> [Shift] or [L] (Invulnerable dash)</p>
-                    <p class="text-amber-300 font-bold"><span class="text-amber-400">🚩 CHECKPOINTS:</span> Stage start checkpoints restore 3 full hearts on death!</p>
+                <div class="mt-4 text-[9px] sm:text-[11px] text-slate-300 bg-black/80 border border-amber-500/50 p-3 rounded-lg space-y-1.5 max-w-md text-left">
+                    <p class="text-red-400 font-bold"><span class="text-yellow-300">⚔️ ATTACK (20 DMG):</span> [Z], [X], or LEFT-CLICK (1 slash hit per swing! Slay basic demons in 3 slashes)</p>
+                    <p class="text-cyan-300 font-bold"><span class="text-cyan-400">🛡️ SHIELD:</span> [J] Blocks incoming hits & meteors! (7s cooldown)</p>
+                    <p class="text-emerald-400 font-bold"><span class="text-emerald-300">💚 COMBO HEAL:</span> Reach 5+ Combo & press [H] to heal +0.5 Heart!</p>
+                    <p><span class="text-amber-400">DOUBLE JUMP / DASH:</span> [SPACE] x2, [Shift] or [L] to leap across lava gaps!</p>
                 </div>
             </div>
 
@@ -162,9 +161,36 @@
                 <h2 id="stageBannerText" class="text-lg sm:text-2xl text-amber-300 glow-orange">STAGE CLEARED!</h2>
                 <p id="stageBannerSub" class="text-[10px] text-red-300 mt-1">+1 HEART RESTORED!</p>
             </div>
+
+            <!-- Black Screen Ending Cutscene Overlay -->
+            <div id="cutsceneOverlay" class="hidden absolute inset-0 bg-black flex flex-col items-center justify-center z-40 p-6 text-center">
+                <!-- Knight Portrait Box -->
+                <div class="relative mb-4 flex flex-col items-center">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 bg-slate-900 border-4 border-amber-500 rounded-lg flex items-center justify-center p-2 shadow-[0_0_25px_rgba(255,200,0,0.4)] mb-3">
+                        <canvas id="portraitCanvas" width="80" height="80" class="w-full h-full object-contain"></canvas>
+                    </div>
+                    <!-- Speech Bubble -->
+                    <div class="relative bg-amber-100 text-black font-bold text-xs sm:text-sm px-4 py-2.5 rounded-xl border-2 border-amber-600 shadow-lg glow-orange max-w-xs animate-bounce">
+                        <span class="text-red-600">"</span>Woah! You did it!<span class="text-red-600">"</span>
+                        <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-b-8 border-b-amber-100"></div>
+                    </div>
+                </div>
+
+                <h2 class="text-xl sm:text-3xl text-yellow-400 glow-orange mb-2">VICTORY ACHIEVED!</h2>
+                <p class="text-slate-300 text-[10px] sm:text-xs mb-4 max-w-md">You conquered all infernal challenges and defeated Demon Lord Khal'gorath!</p>
+
+                <div class="mb-5 text-xs space-y-1.5 text-amber-300 bg-slate-950/80 border border-amber-500/60 p-3 rounded-lg min-w-[200px]">
+                    <p>FINAL SCORE: <span id="cutsceneScore" class="text-white font-bold">0</span></p>
+                    <p>TIME TAKEN: <span id="cutsceneTime" class="text-white font-bold">0s</span></p>
+                </div>
+
+                <button id="cutsceneRestartBtn" class="retro-btn px-6 py-3 text-amber-100 font-bold text-xs sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">
+                    PLAY AGAIN
+                </button>
+            </div>
         </div>
 
-        <!-- Touch Controls for Mobile Devices -->
+        <!-- Mobile Touch Controls -->
         <div class="w-full flex justify-between items-center sm:hidden z-10 px-1 pt-1">
             <div class="flex space-x-1">
                 <button id="tLeft" class="w-10 h-10 bg-gray-900 border-2 border-amber-600/60 rounded flex items-center justify-center text-amber-400 text-base active:bg-amber-700">◀</button>
@@ -283,6 +309,7 @@
             }
 
             playLava() { this.playTone(60, 'sawtooth', 0.3, 0.15); }
+            playCrumble() { this.playTone(110, 'sawtooth', 0.1, 0.1); }
 
             playVictory() {
                 if (this.muted || !this.ctx) return;
@@ -348,6 +375,18 @@
         const resumeBtn = document.getElementById('resumeBtn');
         const restartBtn = document.getElementById('restartBtn');
 
+        const cutsceneOverlay = document.getElementById('cutsceneOverlay');
+        const cutsceneScore = document.getElementById('cutsceneScore');
+        const cutsceneTime = document.getElementById('cutsceneTime');
+        const cutsceneRestartBtn = document.getElementById('cutsceneRestartBtn');
+        const portraitCanvas = document.getElementById('portraitCanvas');
+
+        // Image loader for Boofemo character with automatic fallback
+        const boofemoImg = new Image();
+        let boofemoLoaded = false;
+        boofemoImg.onload = () => { boofemoLoaded = true; };
+        boofemoImg.src = 'boofemo!.png';
+
         const comboText = document.getElementById('comboText');
         const healReadyBadge = document.getElementById('healReadyBadge');
 
@@ -370,16 +409,17 @@
         let cameraX = 0;
         let cameraY = 0;
 
+        // Cutscene Timers & Phase State
+        let cutscenePhase = 'NONE'; // 'NONE', 'WAIT_10S', 'SHOW_BOOFEMO', 'BLACK_SCREEN'
+        let cutsceneTimer = 0;
+        let boofemoPos = { x: 240, y: 188 };
+
         // Combo & Combo Heal System
         let comboCount = 0;
         let comboTimer = 0;
-        const MAX_COMBO_TIME = 5.0; // 5 seconds reset timer
+        const MAX_COMBO_TIME = 5.0;
 
-        let activeCheckpoint = {
-            stage: 1,
-            x: 40,
-            y: 180
-        };
+        let activeCheckpoint = { stage: 1, x: 40, y: 180 };
 
         function drawPixelRect(ctx, color, x, y, w, h) {
             ctx.fillStyle = color;
@@ -389,35 +429,116 @@
         const Sprites = {
             drawKnight(ctx, x, y, facing, state, frame, shieldActive, shieldCharges) {
                 ctx.save();
-                ctx.translate(Math.floor(x + 12), Math.floor(y + 16));
+                ctx.translate(Math.floor(x + 9), Math.floor(y + 12));
                 if (facing === -1) ctx.scale(-1, 1);
 
-                // Cape
-                drawPixelRect(ctx, '#880000', -8, -6, 5, 14);
-                // Armor Body
-                drawPixelRect(ctx, '#99aab5', -5, -8, 10, 14);
-                drawPixelRect(ctx, '#2c2f33', -4, -2, 8, 4);
-                // Legs
-                const legOffset = (state === 'run') ? (Math.sin(frame * 0.4) * 3) : 0;
-                drawPixelRect(ctx, '#4f545c', -4, 6, 3, 6 + legOffset);
-                drawPixelRect(ctx, '#4f545c', 1, 6, 3, 6 - legOffset);
-                // Helmet
-                drawPixelRect(ctx, '#7289da', -6, -16, 12, 9);
-                drawPixelRect(ctx, '#ffcc00', -2, -14, 8, 2);
-                drawPixelRect(ctx, '#ff0033', -6, -18, 4, 3);
+                const legAnim = (state === 'run') ? Math.sin(frame * 0.4) * 3 : 0;
 
-                if (state === 'dash') drawPixelRect(ctx, '#00ffff', -9, -10, 3, 16);
+                // Red Cape Behind
+                drawPixelRect(ctx, '#800014', -10, -2, 5, 11);
+                drawPixelRect(ctx, '#b3001b', -9, 0, 4, 10);
 
-                if (state === 'attack') {
-                    ctx.fillStyle = '#e6e6e6';
-                    ctx.fillRect(4, -12, 16, 4);
-                    ctx.fillRect(16, -16, 4, 16);
-                    ctx.fillStyle = '#00ffff';
-                    ctx.fillRect(6, -10, 18, 2);
-                } else {
-                    drawPixelRect(ctx, '#cccccc', 4, -4, 3, 10);
+                // Left Arm / Blue Shoulder Guard (Inferno Knight's pauldron)
+                drawPixelRect(ctx, '#1d4ed8', -10, -3, 4, 5);
+                drawPixelRect(ctx, '#3b82f6', -10, -2, 2, 3);
+
+                // Dark Steel Legs
+                drawPixelRect(ctx, '#27272a', -5, 5, 4, 6 + legAnim);
+                drawPixelRect(ctx, '#27272a', 1, 5, 4, 6 - legAnim);
+                // Yellow Sheen on Legs
+                drawPixelRect(ctx, '#facc15', -4, 6 + legAnim, 1, 3);
+                drawPixelRect(ctx, '#facc15', 2, 6 - legAnim, 1, 3);
+                // Black Boots
+                drawPixelRect(ctx, '#09090b', -6, 10 + legAnim, 5, 2);
+                drawPixelRect(ctx, '#09090b', 1, 10 - legAnim, 5, 2);
+
+                // Dark Steel Body Armor
+                drawPixelRect(ctx, '#18181b', -6, -4, 12, 10);
+                drawPixelRect(ctx, '#27272a', -5, -3, 10, 8);
+                // Yellow Trim Edging on Armor
+                drawPixelRect(ctx, '#facc15', -6, -4, 12, 1);
+                drawPixelRect(ctx, '#facc15', -6, 5, 12, 1);
+                drawPixelRect(ctx, '#facc15', -6, -4, 1, 10);
+                drawPixelRect(ctx, '#facc15', 5, -4, 1, 10);
+
+                // Red Templar Cross Emblem on Chest
+                drawPixelRect(ctx, '#dc2626', -1, -2, 2, 6);
+                drawPixelRect(ctx, '#dc2626', -3, 0, 6, 2);
+                drawPixelRect(ctx, '#f87171', -1, 0, 2, 2);
+
+                // Helmet - Bucket Helm
+                drawPixelRect(ctx, '#18181b', -6, -12, 12, 8);
+                // Golden Crown trim on top
+                drawPixelRect(ctx, '#eab308', -5, -13, 10, 2);
+                drawPixelRect(ctx, '#fef08a', -3, -13, 6, 1);
+
+                // Visor Windows / Large Eyes
+                drawPixelRect(ctx, '#ffffff', -4, -10, 4, 4);
+                drawPixelRect(ctx, '#ffffff', 1, -10, 4, 4);
+                // Pupils and pupil highlights
+                drawPixelRect(ctx, '#000000', -3, -9, 2, 3);
+                drawPixelRect(ctx, '#000000', 2, -9, 2, 3);
+                drawPixelRect(ctx, '#facc15', -4, -11, 4, 1);
+                drawPixelRect(ctx, '#facc15', 1, -11, 4, 1);
+
+                // Dash trail effect
+                if (state === 'dash') {
+                    drawPixelRect(ctx, '#38bdf8', -12, -8, 3, 16);
+                    drawPixelRect(ctx, '#e0f2fe', -14, -4, 2, 10);
                 }
 
+                // Glowing Blue Lightning Sword
+                if (state === 'attack') {
+                    ctx.save();
+                    ctx.rotate(0.3);
+                    // Sword Hilt & Guard
+                    drawPixelRect(ctx, '#94a3b8', 6, -6, 2, 6);
+                    drawPixelRect(ctx, '#64748b', 4, -4, 6, 2);
+                    // Broad Blade (Cyan / Glowing Blue)
+                    drawPixelRect(ctx, '#0284c7', 8, -16, 6, 14);
+                    drawPixelRect(ctx, '#38bdf8', 9, -15, 4, 12);
+                    drawPixelRect(ctx, '#f0f9ff', 10, -14, 2, 10);
+                    // Sword Tip
+                    drawPixelRect(ctx, '#0284c7', 9, -18, 4, 2);
+                    drawPixelRect(ctx, '#38bdf8', 10, -19, 2, 1);
+
+                    // Electric Sparks / Lightning Arcs around Sword
+                    const sparkOffset = Math.floor(frame % 3);
+                    drawPixelRect(ctx, '#38bdf8', 14 + sparkOffset, -14, 2, 3);
+                    drawPixelRect(ctx, '#00ffff', 5 - sparkOffset, -12, 2, 2);
+                    drawPixelRect(ctx, '#38bdf8', 13, -8 + sparkOffset, 3, 2);
+                    ctx.restore();
+                } else {
+                    // Idle / Upright Stance
+                    // Sword Hilt & Guard
+                    drawPixelRect(ctx, '#94a3b8', 5, -3, 2, 5);
+                    drawPixelRect(ctx, '#64748b', 3, -1, 6, 2);
+                    // Broad Blade (Cyan / Glowing Blue)
+                    drawPixelRect(ctx, '#0284c7', 5, -13, 6, 12);
+                    drawPixelRect(ctx, '#38bdf8', 6, -12, 4, 10);
+                    drawPixelRect(ctx, '#f0f9ff', 7, -11, 2, 8);
+                    // Sword Tip
+                    drawPixelRect(ctx, '#0284c7', 6, -15, 4, 2);
+                    drawPixelRect(ctx, '#38bdf8', 7, -16, 2, 1);
+
+                    // Lightning Sparks
+                    const spark = Math.floor(frame * 2) % 4;
+                    if (spark === 0) {
+                        drawPixelRect(ctx, '#38bdf8', 12, -14, 2, 2);
+                        drawPixelRect(ctx, '#00ffff', 2, -10, 2, 3);
+                    } else if (spark === 1) {
+                        drawPixelRect(ctx, '#00ffff', 12, -8, 3, 2);
+                        drawPixelRect(ctx, '#38bdf8', 3, -15, 2, 2);
+                    } else if (spark === 2) {
+                        drawPixelRect(ctx, '#38bdf8', 11, -16, 2, 3);
+                        drawPixelRect(ctx, '#00ffff', 2, -6, 3, 2);
+                    } else {
+                        drawPixelRect(ctx, '#00ffff', 12, -11, 2, 2);
+                        drawPixelRect(ctx, '#38bdf8', 3, -12, 2, 2);
+                    }
+                }
+
+                // Shield Aura
                 if (shieldActive) {
                     ctx.save();
                     const auraPulse = Math.sin(frame * 0.3) * 2;
@@ -432,7 +553,6 @@
                     ctx.arc(0, -2, 18 + auraPulse, 0, Math.PI * 2);
                     ctx.fill();
 
-                    // Render remaining shield charge pips
                     for (let i = 0; i < shieldCharges; i++) {
                         const angle = (i * (Math.PI * 2 / 3)) + (frame * 0.1);
                         const px = Math.cos(angle) * 20;
@@ -442,6 +562,65 @@
                     }
                     ctx.restore();
                 }
+
+                ctx.restore();
+            },
+
+            drawKnightPortrait(ctx) {
+                ctx.clearRect(0, 0, 80, 80);
+                ctx.save();
+                ctx.translate(40, 52);
+                ctx.scale(2.5, 2.5);
+
+                // Body & Bucket Helm
+                drawPixelRect(ctx, '#18181b', -6, -12, 12, 12);
+                drawPixelRect(ctx, '#eab308', -5, -13, 10, 2);
+                drawPixelRect(ctx, '#ffffff', -4, -10, 4, 4);
+                drawPixelRect(ctx, '#ffffff', 1, -10, 4, 4);
+                drawPixelRect(ctx, '#000000', -3, -9, 2, 3);
+                drawPixelRect(ctx, '#000000', 2, -9, 2, 3);
+                
+                // Red Chest Emblem
+                drawPixelRect(ctx, '#18181b', -6, 0, 12, 8);
+                drawPixelRect(ctx, '#dc2626', -1, 1, 2, 5);
+                drawPixelRect(ctx, '#dc2626', -3, 3, 6, 2);
+
+                // Sword Blade
+                drawPixelRect(ctx, '#0284c7', 7, -15, 4, 16);
+                drawPixelRect(ctx, '#38bdf8', 8, -14, 2, 14);
+
+                ctx.restore();
+            },
+
+            drawBoofemoPixel(ctx, x, y, frame) {
+                ctx.save();
+                ctx.translate(Math.floor(x), Math.floor(y));
+                const floatOffset = Math.sin(frame * 0.2) * 3;
+
+                // Glowing Aura
+                ctx.fillStyle = 'rgba(255, 105, 180, 0.3)';
+                ctx.beginPath();
+                ctx.arc(0, -12 + floatOffset, 16, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Character Base
+                drawPixelRect(ctx, '#ff69b4', -10, -22 + floatOffset, 20, 18);
+                drawPixelRect(ctx, '#ffb6c1', -8, -20 + floatOffset, 16, 14);
+
+                // Cute Big Eyes & Sparkles
+                drawPixelRect(ctx, '#000000', -6, -16 + floatOffset, 4, 5);
+                drawPixelRect(ctx, '#000000', 2, -16 + floatOffset, 4, 5);
+                drawPixelRect(ctx, '#ffffff', -5, -15 + floatOffset, 2, 2);
+                drawPixelRect(ctx, '#ffffff', 3, -15 + floatOffset, 2, 2);
+
+                // Blush & Smile
+                drawPixelRect(ctx, '#ff1493', -8, -11 + floatOffset, 3, 2);
+                drawPixelRect(ctx, '#ff1493', 5, -11 + floatOffset, 3, 2);
+                drawPixelRect(ctx, '#ff007f', -2, -11 + floatOffset, 4, 2);
+
+                // Golden Crown
+                drawPixelRect(ctx, '#ffd700', -6, -26 + floatOffset, 12, 4);
+                drawPixelRect(ctx, '#ffffff', -2, -25 + floatOffset, 4, 2);
 
                 ctx.restore();
             },
@@ -489,13 +668,20 @@
                 ctx.restore();
             },
 
-            drawDemonBoss(ctx, x, y, frame, state) {
+            drawDemonBoss(ctx, x, y, frame, state, invulnTimer) {
                 ctx.save();
                 ctx.translate(Math.floor(x + 32), Math.floor(y + 32));
                 const pulse = Math.sin(frame * 0.2) * 2;
 
+                if (invulnTimer > 0 && Math.floor(frame) % 2 === 0) {
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillRect(-32, -32, 64, 64);
+                    ctx.restore();
+                    return;
+                }
+
                 if (state === 'cast' || state === 'slam') {
-                    ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.25)';
                     ctx.beginPath();
                     ctx.arc(0, 0, 48 + pulse * 2, 0, Math.PI * 2);
                     ctx.fill();
@@ -525,16 +711,11 @@
             drawCheckpointStatue(ctx, x, y, frame) {
                 ctx.save();
                 ctx.translate(Math.floor(x + 8), Math.floor(y + 16));
-                
-                // Pedestal
                 drawPixelRect(ctx, '#444444', -8, 8, 16, 8);
                 drawPixelRect(ctx, '#666666', -6, 6, 12, 2);
-                
-                // Statue Body
                 drawPixelRect(ctx, '#00ffcc', -4, -10, 8, 16);
                 drawPixelRect(ctx, '#ffffff', -2, -14, 4, 4);
 
-                // Orb / Flame on Top
                 const glow = Math.sin(frame * 0.3) * 3;
                 ctx.fillStyle = 'rgba(0, 255, 200, 0.3)';
                 ctx.beginPath();
@@ -552,6 +733,12 @@
                 drawPixelRect(ctx, '#ffffff', x + 2, y + 2, 4, 4);
             },
 
+            drawMeteor(ctx, x, y) {
+                drawPixelRect(ctx, '#aa3300', x, y, 10, 10);
+                drawPixelRect(ctx, '#ff6600', x + 2, y + 2, 6, 6);
+                drawPixelRect(ctx, '#ffff00', x + 3, y + 3, 4, 4);
+            },
+
             drawChalice(ctx, x, y, frame) {
                 ctx.save();
                 ctx.translate(Math.floor(x + 12), Math.floor(y + 16));
@@ -560,6 +747,28 @@
                 drawPixelRect(ctx, '#e6b800', -3, -4, 6, 8);
                 drawPixelRect(ctx, '#ffdd00', -10, -14, 20, 10);
                 drawPixelRect(ctx, '#00ffff', -5, -18 + glow, 10, 6);
+                ctx.restore();
+            },
+
+            drawPortal(ctx, x, y, frame, active) {
+                ctx.save();
+                ctx.translate(Math.floor(x + 12), Math.floor(y + 20));
+                const pulse = Math.sin(frame * 0.3) * 3;
+
+                drawPixelRect(ctx, '#443355', -14, -24, 28, 30);
+                drawPixelRect(ctx, '#110022', -10, -20, 20, 26);
+
+                if (active) {
+                    ctx.fillStyle = 'rgba(0, 255, 200, 0.4)';
+                    ctx.beginPath();
+                    ctx.arc(0, -7, 10 + pulse, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    drawPixelRect(ctx, '#00ffff', -6, -13, 12, 12);
+                    drawPixelRect(ctx, '#ffffff', -3, -10, 6, 6);
+                } else {
+                    drawPixelRect(ctx, '#ff0000', -4, -10, 8, 8);
+                }
                 ctx.restore();
             }
         };
@@ -577,11 +786,10 @@
                 this.grounded = false;
                 this.facing = 1;
 
-                // 3 Max Hearts (6 Half Hearts)
                 this.hearts = 3.0;
                 this.maxHearts = 3.0;
 
-                this.jumpsLeft = 2; // Supports Double Jump
+                this.jumpsLeft = 2;
                 this.coyoteTimer = 0;
 
                 this.isDashing = false;
@@ -589,9 +797,9 @@
                 this.dashCooldown = 0;
                 this.isAttacking = false;
                 this.attackTimer = 0;
+                this.attackId = 0; // Unique ID for each sword slash swing
                 this.invulnerableTimer = 0;
 
-                // Shield Mechanics (3 Hits, 7s Cooldown)
                 this.shieldActive = false;
                 this.shieldCharges = 3;
                 this.maxShieldCharges = 3;
@@ -600,6 +808,8 @@
 
                 this.animState = 'idle';
                 this.animFrame = 0;
+
+                this.ridingPlatform = null;
             }
 
             reset(x, y) {
@@ -614,6 +824,7 @@
                 this.shieldActive = false;
                 this.shieldCharges = 3;
                 this.shieldCooldown = 0;
+                this.ridingPlatform = null;
                 this.updateShieldHUD();
                 this.renderHearts();
             }
@@ -661,7 +872,7 @@
 
             updateShieldHUD() {
                 if (this.shieldActive) {
-                    shieldHudText.textContent = `🛡️ SHIELD: ${this.shieldCharges}/3 HITS`;
+                    shieldHudText.textContent = `🛡 SHIELD: ${this.shieldCharges}/3 HITS`;
                     shieldHudText.className = "text-cyan-300 font-bold glow-cyan";
                     shieldCdContainer.classList.add('hidden');
                 } else if (this.shieldCooldown > 0) {
@@ -682,12 +893,19 @@
                 if (this.invulnerableTimer > 0) this.invulnerableTimer -= dt;
                 if (this.dashCooldown > 0) this.dashCooldown -= dt;
 
-                // Auto-recharge timer when broken
+                // Transfer velocity from riding moving platform to player
+                if (this.ridingPlatform && !this.ridingPlatform.broken) {
+                    this.x += this.ridingPlatform.dx;
+                    this.y += this.ridingPlatform.dy;
+                } else {
+                    this.ridingPlatform = null;
+                }
+
                 if (this.shieldCooldown > 0) {
                     this.shieldCooldown -= dt;
                     if (this.shieldCooldown <= 0) {
                         this.shieldCooldown = 0;
-                        this.activateShield(); // Auto re-activates once recharged!
+                        this.activateShield();
                     } else {
                         this.updateShieldHUD();
                     }
@@ -697,7 +915,6 @@
                     this.activateShield();
                 }
 
-                // Combo Heal Input [H]
                 if (keys['KeyH'] && !previousKeys['KeyH']) {
                     triggerComboHeal();
                 }
@@ -739,17 +956,17 @@
                 if ((keys['KeyZ'] || keys['KeyX'] || keys['MouseLeft']) && !this.isAttacking) {
                     this.isAttacking = true;
                     this.attackTimer = 0.22;
+                    this.attackId++; // New swing ID
                     audio.playAttack();
                 }
 
                 if (this.grounded) {
                     this.coyoteTimer = 0.1;
-                    this.jumpsLeft = 2; // Reset Double Jump
+                    this.jumpsLeft = 2;
                 } else {
                     this.coyoteTimer -= dt;
                 }
 
-                // Explicit Double Jump Logic (Press Space twice)
                 const isJumpPressed = (keys['KeyW'] || keys['ArrowUp'] || keys['Space'] || keys['KeyK']) &&
                                      !(previousKeys['KeyW'] || previousKeys['ArrowUp'] || previousKeys['Space'] || previousKeys['KeyK']);
 
@@ -758,31 +975,42 @@
                         this.vy = this.jumpForce;
                         this.coyoteTimer = 0;
                         this.jumpsLeft = 1;
+                        this.ridingPlatform = null;
                         audio.playJump();
-                    } else if (this.jumpsLeft > 0) { // Mid-air second jump!
-                        this.vy = this.jumpForce * 0.95;
+                    } else if (this.jumpsLeft > 0) {
+                        this.vy = this.jumpForce;
                         this.jumpsLeft = 0;
+                        this.ridingPlatform = null;
                         audio.playJump();
-                        for (let i = 0; i < 6; i++) particles.push(new Particle(this.x + 9, this.y + 20, '#ffffff'));
+                        for (let i = 0; i < 8; i++) particles.push(new Particle(this.x + 9, this.y + 20, '#00ffff'));
                     }
                 }
 
                 this.x += this.vx * dt;
                 platforms.forEach(p => {
+                    if (p.broken) return;
                     if (this.checkCollision(this, p)) {
-                        if (this.vx > 0) this.x = p.x - this.width;
-                        else if (this.vx < 0) this.x = p.x + p.w;
+                        // Prevent vertical moving platforms rising UP from triggering false horizontal side pushes
+                        const isStandingOnTop = (this.y + this.height) <= (p.y + 6);
+                        if (!isStandingOnTop) {
+                            if (this.vx > 0) this.x = p.x - this.width;
+                            else if (this.vx < 0) this.x = p.x + p.w;
+                        }
                     }
                 });
 
                 this.grounded = false;
+                this.ridingPlatform = null;
                 this.y += this.vy * dt;
                 platforms.forEach(p => {
+                    if (p.broken) return;
                     if (this.checkCollision(this, p)) {
-                        if (this.vy > 0) {
+                        if (this.vy >= 0 && (this.y + this.height - this.vy * dt) <= p.y + 12) {
                             this.y = p.y - this.height;
                             this.vy = 0;
                             this.grounded = true;
+                            this.ridingPlatform = p;
+                            p.onSteppedOn(dt);
                         } else if (this.vy < 0) {
                             this.y = p.y + p.h;
                             this.vy = 0;
@@ -804,7 +1032,6 @@
                 );
             }
 
-            // Shield Absorbs 3 Hits continuously without breaking early
             takeDamage(knockbackDir = 0) {
                 if (this.invulnerableTimer > 0 || this.isDashing) return;
 
@@ -814,21 +1041,20 @@
                     
                     for (let i = 0; i < 8; i++) particles.push(new Particle(this.x + 8, this.y + 10, '#00ffff'));
 
-                    if (this.shieldCharges <= 0) { // Only breaks after ALL 3 hits!
+                    if (this.shieldCharges <= 0) {
                         this.shieldActive = false;
                         this.shieldCooldown = this.maxShieldCooldown;
                         audio.playShieldBreak();
                         for (let i = 0; i < 15; i++) particles.push(new Particle(this.x + 8, this.y + 10, '#ffffff'));
                     }
                     this.updateShieldHUD();
-                    this.invulnerableTimer = 0.5; // Short hit grace
+                    this.invulnerableTimer = 0.5;
                     return;
                 }
 
-                // Deduct 0.5 Heart
                 this.hearts -= 0.5;
                 this.renderHearts();
-                this.invulnerableTimer = 1.25; // 1.25s i-frames
+                this.invulnerableTimer = 1.25;
                 this.vy = -150;
                 this.vx = knockbackDir * 180;
                 audio.playHit();
@@ -845,22 +1071,172 @@
         }
 
         class Platform {
-            constructor(x, y, w, h, type = 'stone') {
+            constructor(x, y, w, h, type = 'stone', options = {}) {
+                this.x = x;
+                this.y = y;
+                this.startX = x;
+                this.startY = y;
+                this.w = w;
+                this.h = h;
+                this.type = type; // stone, obsidian, crumble, moving, sinking
+                
+                // Dynamic Options
+                this.moveRangeX = options.moveRangeX || 0;
+                this.moveRangeY = options.moveRangeY || 0;
+                this.speed = options.speed || 1.5;
+                this.timer = Math.random() * Math.PI * 2;
+
+                this.stepped = false;
+                this.crumbleTimer = 0.7; // 0.7s after stepped on, crumbles
+                this.broken = false;
+                this.shake = 0;
+
+                this.dx = 0;
+                this.dy = 0;
+            }
+
+            onSteppedOn(dt) {
+                if (this.type === 'crumble' && !this.stepped && !this.broken) {
+                    this.stepped = true;
+                    audio.playCrumble();
+                }
+                if (this.type === 'sinking') {
+                    this.y += 20 * dt;
+                }
+            }
+
+            update(dt) {
+                const prevX = this.x;
+                const prevY = this.y;
+
+                if (this.type === 'moving') {
+                    this.timer += dt * this.speed;
+                    this.x = this.startX + Math.sin(this.timer) * this.moveRangeX;
+                    this.y = this.startY + Math.cos(this.timer) * this.moveRangeY;
+                }
+
+                this.dx = this.x - prevX;
+                this.dy = this.y - prevY;
+
+                if (this.type === 'crumble' && this.stepped && !this.broken) {
+                    this.crumbleTimer -= dt;
+                    this.shake = (Math.random() - 0.5) * 4;
+                    if (this.crumbleTimer <= 0) {
+                        this.broken = true;
+                        audio.playCrumble();
+                        for (let i = 0; i < 10; i++) {
+                            particles.push(new Particle(this.x + Math.random() * this.w, this.y, '#aa4400'));
+                        }
+                    }
+                }
+            }
+
+            draw(ctx) {
+                if (this.broken) return;
+                ctx.save();
+                const drawX = this.x + this.shake;
+                const drawY = this.y;
+
+                if (this.type === 'stone') {
+                    drawPixelRect(ctx, '#3a3d40', drawX, drawY, this.w, this.h);
+                    drawPixelRect(ctx, '#585c61', drawX, drawY, this.w, 3);
+                } else if (this.type === 'obsidian' || this.type === 'moving' || this.type === 'sinking') {
+                    drawPixelRect(ctx, '#1a0d1a', drawX, drawY, this.w, this.h);
+                    drawPixelRect(ctx, this.type === 'moving' ? '#00ffff' : '#ff3300', drawX, drawY, this.w, 2);
+                } else if (this.type === 'crumble') {
+                    drawPixelRect(ctx, '#773311', drawX, drawY, this.w, this.h);
+                    drawPixelRect(ctx, '#ffaa44', drawX, drawY, this.w, 2);
+                    // Cracks
+                    if (this.stepped) {
+                        drawPixelRect(ctx, '#110000', drawX + this.w * 0.3, drawY + 2, 2, this.h - 4);
+                        drawPixelRect(ctx, '#110000', drawX + this.w * 0.6, drawY + 2, 2, this.h - 4);
+                    }
+                }
+                ctx.restore();
+            }
+        }
+
+        class FireBarrier {
+            constructor(x, y, w, h, interval = 2.0) {
                 this.x = x;
                 this.y = y;
                 this.w = w;
                 this.h = h;
-                this.type = type;
+                this.interval = interval;
+                this.timer = 0;
+                this.active = true;
+            }
+
+            update(dt, player) {
+                this.timer += dt;
+                if (this.timer >= this.interval) {
+                    this.timer = 0;
+                    this.active = !this.active;
+                }
+
+                if (this.active && player.checkCollision(player, this)) {
+                    player.takeDamage(Math.sign(player.x - this.x));
+                }
             }
 
             draw(ctx) {
                 ctx.save();
-                if (this.type === 'stone') {
-                    drawPixelRect(ctx, '#3a3d40', this.x, this.y, this.w, this.h);
-                    drawPixelRect(ctx, '#585c61', this.x, this.y, this.w, 3);
-                } else if (this.type === 'obsidian') {
-                    drawPixelRect(ctx, '#1a0d1a', this.x, this.y, this.w, this.h);
-                    drawPixelRect(ctx, '#ff3300', this.x, this.y, this.w, 2);
+                if (this.active) {
+                    ctx.fillStyle = 'rgba(255, 68, 0, 0.7)';
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                    drawPixelRect(ctx, '#ffff00', this.x + 2, this.y, this.w - 4, this.h);
+                } else {
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+                    ctx.fillRect(this.x, this.y, this.w, this.h);
+                }
+                ctx.restore();
+            }
+        }
+
+        class LavaGeyser {
+            constructor(x, targetY) {
+                this.x = x;
+                this.y = targetY;
+                this.timer = Math.random() * 2;
+                this.state = 'idle'; // idle, warning, erupting
+                this.stateTimer = 0;
+            }
+
+            update(dt, player) {
+                this.timer += dt;
+                if (this.state === 'idle' && this.timer > 3.5) {
+                    this.state = 'warning';
+                    this.stateTimer = 1.0;
+                    this.timer = 0;
+                } else if (this.state === 'warning') {
+                    this.stateTimer -= dt;
+                    if (this.stateTimer <= 0) {
+                        this.state = 'erupting';
+                        this.stateTimer = 1.2;
+                        audio.playLava();
+                    }
+                } else if (this.state === 'erupting') {
+                    this.stateTimer -= dt;
+                    const geyserBox = { x: this.x - 8, y: this.y - 120, w: 16, h: 140 };
+                    if (player.checkCollision(player, geyserBox)) {
+                        player.takeDamage(0);
+                    }
+                    if (this.stateTimer <= 0) {
+                        this.state = 'idle';
+                    }
+                }
+            }
+
+            draw(ctx) {
+                ctx.save();
+                if (this.state === 'warning') {
+                    ctx.fillStyle = 'rgba(255, 0, 0, 0.4)';
+                    ctx.fillRect(this.x - 10, this.y - 120, 20, 120);
+                } else if (this.state === 'erupting') {
+                    ctx.fillStyle = '#ff3300';
+                    ctx.fillRect(this.x - 10, this.y - 130, 20, 130);
+                    ctx.fillStyle = '#ffff00';
+                    ctx.fillRect(this.x - 5, this.y - 125, 10, 125);
                 }
                 ctx.restore();
             }
@@ -878,13 +1254,14 @@
         }
 
         class Projectile {
-            constructor(x, y, vx, vy) {
+            constructor(x, y, vx, vy, isMeteor = false) {
                 this.x = x;
                 this.y = y;
                 this.vx = vx;
                 this.vy = vy;
-                this.width = 8;
-                this.height = 8;
+                this.width = isMeteor ? 10 : 8;
+                this.height = isMeteor ? 10 : 8;
+                this.isMeteor = isMeteor;
                 this.active = true;
             }
 
@@ -899,6 +1276,7 @@
                 }
 
                 platforms.forEach(p => {
+                    if (p.broken) return;
                     if (player.checkCollision(this, p)) {
                         this.active = false;
                         for (let i = 0; i < 4; i++) particles.push(new Particle(this.x, this.y, '#ffaa00'));
@@ -908,11 +1286,11 @@
 
             draw(ctx) {
                 if (!this.active) return;
-                Sprites.drawFireball(ctx, this.x, this.y);
+                if (this.isMeteor) Sprites.drawMeteor(ctx, this.x, this.y);
+                else Sprites.drawFireball(ctx, this.x, this.y);
             }
         }
 
-        // Basic Enemies with 60 HP (Takes 3 hits to kill)
         class Enemy {
             constructor(x, y, type = 'crawler') {
                 this.x = x;
@@ -920,7 +1298,7 @@
                 this.type = type;
                 this.width = 20;
                 this.height = 20;
-                this.hp = 60; // Takes 3 hits (20 dmg each)
+                this.hp = 60;
                 this.maxHp = 60;
                 this.startX = x;
                 this.dir = 1;
@@ -931,11 +1309,18 @@
                 this.state = 'walk';
                 this.attackTimer = 0;
                 this.cooldownTimer = Math.random() * 1.5;
+
+                this.lastHitAttackId = -1; // Prevents multi-hits from single swing
             }
 
             update(dt, player, projectiles) {
                 if (this.dead) return;
                 this.animFrame += dt * 10;
+
+                if (this.y > V_HEIGHT + 60) {
+                    this.dead = true;
+                    return;
+                }
 
                 const distToPlayer = Math.hypot((player.x) - (this.x), (player.y) - (this.y));
 
@@ -1009,19 +1394,64 @@
                 this.y = y;
                 this.width = 64;
                 this.height = 64;
-                this.hp = 200;
-                this.maxHp = 200;
+                this.hp = 300;
+                this.maxHp = 300;
                 this.animFrame = 0;
                 this.dead = false;
+                
+                this.vx = 0;
+                this.vy = 0;
+                this.grounded = false;
+                this.jumpTimer = 1.5;
 
                 this.state = 'idle';
                 this.actionTimer = 2.0;
+
+                this.lastHitAttackId = -1; // Fixes one-hit boss bug!
+                this.invulnerableTimer = 0;
             }
 
-            update(dt, player, projectiles) {
+            update(dt, player, projectiles, platforms) {
                 if (this.dead) return;
                 this.animFrame += dt * 10;
                 this.actionTimer -= dt;
+                this.jumpTimer -= dt;
+
+                if (this.invulnerableTimer > 0) this.invulnerableTimer -= dt;
+
+                const distToPlayerX = player.x - this.x;
+                if (Math.abs(distToPlayerX) > 20) {
+                    this.vx = Math.sign(distToPlayerX) * 45;
+                } else {
+                    this.vx = 0;
+                }
+
+                if (this.jumpTimer <= 0 && this.grounded) {
+                    this.vy = -190;
+                    this.jumpTimer = 2.0 + Math.random() * 1.5;
+                }
+
+                this.vy += 550 * dt;
+
+                this.x += this.vx * dt;
+                if (this.x < 10) this.x = 10;
+                if (this.x > 406) this.x = 406;
+
+                this.grounded = false;
+                this.y += this.vy * dt;
+                platforms.forEach(p => {
+                    if (p.broken) return;
+                    if (player.checkCollision(this, p)) {
+                        if (this.vy > 0) {
+                            this.y = p.y - this.height;
+                            this.vy = 0;
+                            this.grounded = true;
+                        } else if (this.vy < 0) {
+                            this.y = p.y + p.h;
+                            this.vy = 0;
+                        }
+                    }
+                });
 
                 if (this.actionTimer <= 0) {
                     const randAction = Math.random();
@@ -1049,13 +1479,18 @@
                     }
                 }
 
-                bossHpBar.style.width = `${Math.max(0, (this.hp / this.maxHp) * 100)}%`;
-                bossHpText.textContent = `${Math.max(0, this.hp)} / ${this.maxHp} HP`;
+                this.updateHUD();
+            }
+
+            updateHUD() {
+                const currentHp = Math.max(0, this.hp);
+                bossHpBar.style.width = `${(currentHp / this.maxHp) * 100}%`;
+                bossHpText.textContent = `${currentHp} / ${this.maxHp} HP`;
             }
 
             draw(ctx) {
                 if (this.dead) return;
-                Sprites.drawDemonBoss(ctx, this.x, this.y, this.animFrame, this.state);
+                Sprites.drawDemonBoss(ctx, this.x, this.y, this.animFrame, this.state, this.invulnerableTimer);
             }
         }
 
@@ -1084,6 +1519,8 @@
 
         const player = new Player();
         let platforms = [];
+        let fireBarriers = [];
+        let lavaGeysers = [];
         let enemies = [];
         let projectiles = [];
         let particles = [];
@@ -1091,6 +1528,7 @@
         let boss = null;
         let lavaHeight = V_HEIGHT + 50;
         let chalicePos = { x: 0, y: 0 };
+        let meteorTimer = 0;
 
         function incrementCombo() {
             comboCount++;
@@ -1121,16 +1559,21 @@
         function loadStage(stageNum) {
             currentStage = stageNum;
             platforms = [];
+            fireBarriers = [];
+            lavaGeysers = [];
             enemies = [];
             projectiles = [];
             particles = [];
             boss = null;
             bossBarContainer.classList.add('hidden');
+            cutsceneOverlay.classList.add('hidden');
+            cutscenePhase = 'NONE';
+            cutsceneTimer = 0;
 
-            // Strictly 1 Checkpoint at the beginning of each level!
             activeCheckpoint = { stage: stageNum, x: 40, y: 180 };
 
             if (stageNum === 1) {
+                // STAGE 1: THE CITADEL (SLAY DEMONS TO OPEN PORTAL)
                 stageLabel.textContent = "STAGE 1: CITADEL";
                 stageLabel.className = "text-cyan-400 glow-cyan";
                 lavaHeight = V_HEIGHT + 100;
@@ -1153,72 +1596,77 @@
 
                 audio.startChiptune(1);
             } else if (stageNum === 2) {
-                stageLabel.textContent = "STAGE 2: VOLCANO LV.1";
+                // STAGE 2: CRUMBLING ASCENT (COLLAPSING PLATFORMS & FALLING METEORS)
+                stageLabel.textContent = "STAGE 2: CRUMBLING ASCENT";
                 stageLabel.className = "text-amber-500 glow-orange";
-                lavaHeight = V_HEIGHT - 10;
+                lavaHeight = V_HEIGHT - 5;
 
-                startCheckpoint = new Checkpoint(40, 206);
+                startCheckpoint = new Checkpoint(30, 206);
 
-                // Static Obsidian Platforms Only (No Moving, No Disappearing)
-                platforms.push(new Platform(20, 230, 80, 40, 'obsidian'));
-                platforms.push(new Platform(130, 200, 50, 15, 'obsidian'));
-                platforms.push(new Platform(210, 170, 60, 15, 'obsidian'));
-                platforms.push(new Platform(300, 140, 50, 15, 'obsidian'));
-                platforms.push(new Platform(380, 110, 50, 15, 'obsidian'));
-                platforms.push(new Platform(470, 90, 60, 15, 'obsidian'));
-                platforms.push(new Platform(560, 110, 50, 15, 'obsidian'));
-                platforms.push(new Platform(650, 90, 80, 40, 'obsidian'));
+                platforms.push(new Platform(10, 230, 70, 40, 'obsidian'));
+                platforms.push(new Platform(110, 195, 50, 15, 'crumble'));
+                platforms.push(new Platform(190, 165, 50, 15, 'crumble'));
+                platforms.push(new Platform(270, 140, 60, 15, 'obsidian'));
+                platforms.push(new Platform(360, 115, 50, 15, 'crumble'));
+                platforms.push(new Platform(440, 95, 50, 15, 'crumble'));
+                platforms.push(new Platform(520, 80, 80, 40, 'obsidian'));
 
-                chalicePos = { x: 680, y: 50 };
-                enemies.push(new Enemy(220, 120, 'imp'));
-                enemies.push(new Enemy(490, 40, 'imp'));
+                chalicePos = { x: 550, y: 40 };
+                enemies.push(new Enemy(280, 115, 'imp'));
 
                 audio.startChiptune(2);
             } else if (stageNum === 3) {
-                stageLabel.textContent = "STAGE 3: VOLCANO LV.2";
+                // STAGE 3: THE FIRE FALLS (MOVING LIFTS & LAVA GEYSERS)
+                stageLabel.textContent = "STAGE 3: THE FIRE FALLS";
                 stageLabel.className = "text-red-500 glow-orange";
-                lavaHeight = V_HEIGHT - 20;
+                lavaHeight = V_HEIGHT - 10;
 
                 startCheckpoint = new Checkpoint(30, 206);
 
-                // Static Obsidian Platforms Only
                 platforms.push(new Platform(10, 230, 60, 40, 'obsidian'));
-                platforms.push(new Platform(100, 190, 40, 15, 'obsidian'));
-                platforms.push(new Platform(175, 160, 45, 15, 'obsidian'));
-                platforms.push(new Platform(255, 130, 40, 15, 'obsidian'));
-                platforms.push(new Platform(330, 105, 45, 15, 'obsidian'));
-                platforms.push(new Platform(410, 85, 40, 15, 'obsidian'));
-                platforms.push(new Platform(490, 95, 40, 15, 'obsidian'));
-                platforms.push(new Platform(570, 75, 80, 40, 'obsidian'));
+                // Horizontal Moving Lift
+                platforms.push(new Platform(110, 180, 45, 12, 'moving', { moveRangeX: 40, moveRangeY: 0, speed: 1.8 }));
+                // Vertical Moving Lift
+                platforms.push(new Platform(230, 150, 45, 12, 'moving', { moveRangeX: 0, moveRangeY: 35, speed: 2.0 }));
+                platforms.push(new Platform(330, 110, 50, 15, 'obsidian'));
+                // Diagonal Moving Ferry
+                platforms.push(new Platform(420, 100, 45, 12, 'moving', { moveRangeX: 30, moveRangeY: 20, speed: 1.5 }));
+                platforms.push(new Platform(530, 80, 80, 40, 'obsidian'));
 
-                chalicePos = { x: 600, y: 35 };
-                enemies.push(new Enemy(190, 100, 'imp'));
-                enemies.push(new Enemy(420, 35, 'imp'));
+                lavaGeysers.push(new LavaGeyser(180, 260));
+                lavaGeysers.push(new LavaGeyser(380, 260));
+
+                chalicePos = { x: 560, y: 40 };
+                enemies.push(new Enemy(340, 85, 'imp'));
 
                 audio.startChiptune(2);
             } else if (stageNum === 4) {
-                stageLabel.textContent = "STAGE 4: INFERNO LEAP";
+                // STAGE 4: INFERNAL GAUNTLET (TIMED FIRE BARRIERS & SINKING FOOTHOLDS)
+                stageLabel.textContent = "STAGE 4: INFERNAL GAUNTLET";
                 stageLabel.className = "text-red-600 glow-red";
-                lavaHeight = V_HEIGHT - 25;
+                lavaHeight = V_HEIGHT - 15;
 
                 startCheckpoint = new Checkpoint(30, 206);
 
-                // Precision Static Platforms
                 platforms.push(new Platform(10, 230, 50, 40, 'obsidian'));
-                platforms.push(new Platform(90, 190, 35, 12, 'obsidian'));
-                platforms.push(new Platform(160, 160, 35, 12, 'obsidian'));
-                platforms.push(new Platform(235, 135, 35, 12, 'obsidian'));
-                platforms.push(new Platform(305, 110, 40, 12, 'obsidian'));
-                platforms.push(new Platform(380, 85, 35, 12, 'obsidian'));
-                platforms.push(new Platform(455, 95, 35, 12, 'obsidian'));
+                platforms.push(new Platform(90, 190, 40, 12, 'sinking'));
+                platforms.push(new Platform(160, 160, 40, 12, 'sinking'));
+                platforms.push(new Platform(235, 135, 50, 15, 'obsidian'));
+                platforms.push(new Platform(310, 110, 40, 12, 'sinking'));
+                platforms.push(new Platform(380, 85, 40, 12, 'sinking'));
+                platforms.push(new Platform(455, 95, 40, 12, 'obsidian'));
                 platforms.push(new Platform(530, 75, 80, 40, 'obsidian'));
 
-                chalicePos = { x: 560, y: 30 };
-                enemies.push(new Enemy(180, 90, 'imp'));
-                enemies.push(new Enemy(390, 35, 'imp'));
+                // Timed Fire Barriers blocking passages
+                fireBarriers.push(new FireBarrier(140, 130, 10, 50, 1.8));
+                fireBarriers.push(new FireBarrier(360, 55, 10, 50, 1.5));
+
+                chalicePos = { x: 560, y: 35 };
+                enemies.push(new Enemy(245, 110, 'imp'));
 
                 audio.startChiptune(2);
             } else if (stageNum === 5) {
+                // STAGE 5: DEMON LORD KHAL'GORATH BOSS BATTLE
                 stageLabel.textContent = "STAGE 5: DEMON LORD";
                 stageLabel.className = "text-red-600 glow-red animate-pulse";
                 bossBarContainer.classList.remove('hidden');
@@ -1238,6 +1686,15 @@
             player.fullHeal();
         }
 
+        function startPostBossCutscene() {
+            cutscenePhase = 'WAIT_10S';
+            cutsceneTimer = 10.0;
+            stageBannerText.textContent = "BOSS DEFEATED!";
+            stageBannerSub.textContent = "REALM SAVED! SECURING ARENA (10s)...";
+            stageBanner.classList.remove('translate-x-full');
+            audio.playVictory();
+        }
+
         function handlePlayerDeath() {
             if (gameState === 'DYING') return;
             gameState = 'DYING';
@@ -1249,11 +1706,28 @@
 
             setTimeout(() => {
                 stageBanner.classList.add('translate-x-full');
-                loadStage(currentStage); // Respawns at the exact current stage checkpoint!
+                loadStage(currentStage);
                 gameState = 'PLAYING';
                 lastTime = performance.now();
                 requestAnimationFrame(gameLoop);
             }, 1600);
+        }
+
+        function triggerStageTransition(nextStage) {
+            if (gameState === 'TRANSITION') return;
+            gameState = 'TRANSITION';
+            audio.playVictory();
+            stageBannerText.textContent = `STAGE ${currentStage} CLEARED!`;
+            stageBannerSub.textContent = "+1 HEART RESTORED!";
+            stageBanner.classList.remove('translate-x-full');
+
+            setTimeout(() => {
+                stageBanner.classList.add('translate-x-full');
+                loadStage(nextStage);
+                gameState = 'PLAYING';
+                lastTime = performance.now();
+                requestAnimationFrame(gameLoop);
+            }, 1800);
         }
 
         function togglePause() {
@@ -1262,7 +1736,6 @@
                 pauseOverlay.classList.remove('hidden');
                 audio.stopChiptune();
             } else if (gameState === 'PAUSED') {
-                gameState = 'PAUSED_RESUMING';
                 pauseOverlay.classList.add('hidden');
                 gameState = 'PLAYING';
                 audio.startChiptune(currentStage);
@@ -1272,14 +1745,48 @@
         }
 
         function gameLoop(timestamp) {
-            if (gameState === 'PAUSED') return;
-            if (gameState !== 'PLAYING') return;
+            if (gameState === 'PAUSED' || gameState !== 'PLAYING') return;
 
             const dt = Math.min((timestamp - lastTime) / 1000, 0.08);
             lastTime = timestamp;
             gameTime += dt;
 
-            // Combo Decay Timer (Resets combo after 5 seconds of inactivity)
+            if (cutscenePhase === 'WAIT_10S') {
+                cutsceneTimer -= dt;
+                stageBannerSub.textContent = `CELEBRATING VICTORY... (${Math.max(1, Math.ceil(cutsceneTimer))}s)`;
+                
+                if (cutsceneTimer <= 0) {
+                    cutscenePhase = 'SHOW_BOOFEMO';
+                    cutsceneTimer = 3.0;
+                    stageBanner.classList.add('translate-x-full');
+                    // Focus camera back on center platform of boss arena
+                    cameraX = 0;
+                    cameraY = 0;
+                }
+            } else if (cutscenePhase === 'SHOW_BOOFEMO') {
+                cutsceneTimer -= dt;
+                // Add magical sparkles around Boofemo standing in the arena
+                if (Math.random() < 0.6) {
+                    particles.push(new Particle(boofemoPos.x + (Math.random() - 0.5) * 30, boofemoPos.y - 15, '#ff69b4'));
+                    particles.push(new Particle(boofemoPos.x + (Math.random() - 0.5) * 30, boofemoPos.y - 15, '#ffff00'));
+                }
+
+                if (cutsceneTimer <= 0) {
+                    cutscenePhase = 'BLACK_SCREEN';
+                    gameState = 'VICTORY';
+                    audio.stopChiptune();
+
+                    // Render portrait on black screen
+                    const pCtx = portraitCanvas.getContext('2d');
+                    Sprites.drawKnightPortrait(pCtx);
+
+                    cutsceneScore.textContent = score;
+                    cutsceneTime.textContent = `${Math.floor(gameTime)}s`;
+                    cutsceneOverlay.classList.remove('hidden');
+                    return;
+                }
+            }
+
             if (comboCount > 0) {
                 comboTimer -= dt;
                 if (comboTimer <= 0) {
@@ -1288,13 +1795,34 @@
                 }
             }
 
+            // Update Platforms
+            platforms.forEach(p => p.update(dt));
+
+            // Stage 2: Falling volcanic meteors hazard
+            if (currentStage === 2) {
+                meteorTimer += dt;
+                if (meteorTimer > 1.8) {
+                    meteorTimer = 0;
+                    projectiles.push(new Projectile(cameraX + Math.random() * V_WIDTH, cameraY - 10, (Math.random() - 0.5) * 30, 110, true));
+                }
+            }
+
+            // Update Hazards
+            fireBarriers.forEach(fb => fb.update(dt, player));
+            lavaGeysers.forEach(lg => lg.update(dt, player));
+
             player.update(dt, platforms);
 
-            cameraX += (player.x - V_WIDTH / 3 - cameraX) * 0.1;
-            cameraY += (player.y - V_HEIGHT / 2 - cameraY) * 0.1;
-            cameraY = Math.max(0, cameraY);
+            if (cutscenePhase !== 'SHOW_BOOFEMO') {
+                cameraX += (player.x - V_WIDTH / 3 - cameraX) * 0.1;
+                cameraY += (player.y - V_HEIGHT / 2 - cameraY) * 0.1;
+                cameraY = Math.max(0, cameraY);
+            } else {
+                // Focus camera directly on Boofemo standing in center of arena
+                cameraX += (boofemoPos.x - V_WIDTH / 2 - cameraX) * 0.1;
+                cameraY += (boofemoPos.y - V_HEIGHT / 2 - cameraY) * 0.1;
+            }
 
-            // Instant Death on Falling Off Platform into Pit/Lava
             if (player.y > V_HEIGHT + 30) {
                 audio.playLava();
                 handlePlayerDeath();
@@ -1302,7 +1830,7 @@
             }
 
             if ([2, 3, 4].includes(currentStage)) {
-                const speedMult = currentStage === 2 ? 4.5 : (currentStage === 3 ? 6.5 : 8.5);
+                const speedMult = currentStage === 2 ? 3.5 : (currentStage === 3 ? 5.0 : 6.5);
                 lavaHeight -= speedMult * dt;
                 if (player.y + player.height >= lavaHeight) {
                     audio.playLava();
@@ -1322,7 +1850,7 @@
                 if (enemy.dead) return;
                 enemy.update(dt, player, projectiles);
 
-                if (player.isAttacking) {
+                if (player.isAttacking && enemy.lastHitAttackId !== player.attackId) {
                     const atkBox = {
                         x: player.facing === 1 ? player.x + player.width : player.x - 22,
                         y: player.y - 4,
@@ -1336,8 +1864,9 @@
                         atkBox.y < enemy.y + enemy.height &&
                         atkBox.y + atkBox.height > enemy.y
                     ) {
+                        enemy.lastHitAttackId = player.attackId;
                         enemy.hp -= 20;
-                        incrementCombo(); // Increment Combo counter on hit!
+                        incrementCombo();
                         audio.playHit();
                         for (let i = 0; i < 8; i++) particles.push(new Particle(enemy.x + 10, enemy.y + 10, '#ff0033'));
 
@@ -1355,9 +1884,9 @@
             });
 
             if (boss && !boss.dead) {
-                boss.update(dt, player, projectiles);
+                boss.update(dt, player, projectiles, platforms);
 
-                if (player.isAttacking) {
+                if (player.isAttacking && boss.lastHitAttackId !== player.attackId && boss.invulnerableTimer <= 0) {
                     const atkBox = {
                         x: player.facing === 1 ? player.x + player.width : player.x - 22,
                         y: player.y - 4,
@@ -1371,8 +1900,11 @@
                         atkBox.y < boss.y + boss.height &&
                         atkBox.y + atkBox.height > boss.y
                     ) {
-                        boss.hp -= 20;
-                        incrementCombo(); // Increment Combo on boss hit!
+                        boss.lastHitAttackId = player.attackId;
+                        boss.invulnerableTimer = 0.35;
+                        boss.hp = Math.max(0, boss.hp - 20);
+                        boss.updateHUD();
+                        incrementCombo();
                         audio.playHit();
                         for (let i = 0; i < 12; i++) particles.push(new Particle(boss.x + 32, boss.y + 32, '#ffff00'));
 
@@ -1380,25 +1912,18 @@
                             boss.dead = true;
                             score += 1000;
                             if (scoreText) scoreText.textContent = score;
-                            triggerVictory();
+                            startPostBossCutscene();
                         }
                     }
                 }
-
-                if (!boss.dead && player.checkCollision(player, boss)) {
-                    player.takeDamage(Math.sign(player.x - boss.x));
-                }
             }
 
-            // Demons that fall off the map count as defeated
-            enemies.forEach(e => { if (!e.dead && (e.y > V_HEIGHT + 20 || e.x < -100 || e.x > 1400)) e.dead = true; });
-
-            if (currentStage === 1 && player.x > 1150) {
-                const remainingEnemies = enemies.filter(e => !e.dead).length;
-                if (remainingEnemies === 0) {
+            if (currentStage === 1) {
+                const remainingDemons = enemies.filter(e => !e.dead).length;
+                const portalActive = remainingDemons === 0;
+                if (portalActive && player.x >= 1170) {
                     triggerStageTransition(2);
-                } else {
-                    stageLabel.textContent = "CLEAR ALL DEMONS TO PASS!";
+                    return;
                 }
             }
 
@@ -1406,6 +1931,7 @@
                 const distToChalice = Math.hypot((player.x + 9) - (chalicePos.x + 12), (player.y + 12) - (chalicePos.y + 16));
                 if (distToChalice < 24) {
                     triggerStageTransition(currentStage + 1);
+                    return;
                 }
             }
 
@@ -1424,53 +1950,58 @@
             ctx.fillRect(cameraX, cameraY, V_WIDTH, V_HEIGHT);
 
             platforms.forEach(p => p.draw(ctx));
+            fireBarriers.forEach(fb => fb.draw(ctx));
+            lavaGeysers.forEach(lg => lg.draw(ctx));
+
             if (startCheckpoint) startCheckpoint.draw(ctx, gameTime * 10);
-            enemies.forEach(e => e.draw(ctx));
-            if (boss) boss.draw(ctx);
-            projectiles.forEach(p => p.draw(ctx));
-            player.draw(ctx);
-            particles.forEach(p => p.draw(ctx));
+
+            if (currentStage === 1) {
+                const remainingDemons = enemies.filter(e => !e.dead).length;
+                const portalActive = remainingDemons === 0;
+
+                Sprites.drawPortal(ctx, 1180, 170, gameTime * 10, portalActive);
+
+                if (remainingDemons > 0) {
+                    stageLabel.textContent = `STAGE 1: DEMONS ${remainingDemons}/6`;
+                    stageLabel.className = "text-amber-400 glow-orange";
+                } else {
+                    stageLabel.textContent = "PORTAL OPEN! ENTER AT X:1180";
+                    stageLabel.className = "text-green-400 glow-green animate-pulse";
+                }
+            }
 
             if ([2, 3, 4].includes(currentStage)) {
                 Sprites.drawChalice(ctx, chalicePos.x, chalicePos.y, gameTime * 10);
                 ctx.fillStyle = '#ff2200';
                 ctx.fillRect(cameraX, lavaHeight, V_WIDTH, V_HEIGHT);
-                ctx.fillStyle = '#ffcc00';
-                ctx.fillRect(cameraX, lavaHeight, V_WIDTH, 3);
+                ctx.fillStyle = '#ffaa00';
+                ctx.fillRect(cameraX, lavaHeight, V_WIDTH, 2);
             }
+
+            enemies.forEach(e => e.draw(ctx));
+            if (boss && !boss.dead) boss.draw(ctx);
+
+            if (cutscenePhase === 'SHOW_BOOFEMO') {
+                if (boofemoLoaded) {
+                    ctx.drawImage(boofemoImg, boofemoPos.x - 16, boofemoPos.y - 32, 32, 32);
+                } else {
+                    Sprites.drawBoofemoPixel(ctx, boofemoPos.x, boofemoPos.y, gameTime * 10);
+                }
+            }
+
+            projectiles.forEach(p => p.draw(ctx));
+            particles.forEach(p => p.draw(ctx));
+
+            player.draw(ctx);
 
             ctx.restore();
 
-            // Store key states for discrete single press logic
+            // Update previousKeys state at end of frame
             previousKeys = { ...keys };
 
-            requestAnimationFrame(gameLoop);
-        }
-
-        function triggerStageTransition(nextStage) {
-            gameState = 'TRANSITION';
-            audio.stopChiptune();
-            audio.playVictory();
-
-            player.healHalfHeart();
-
-            if (nextStage === 5) {
-                stageBannerText.textContent = "INFERNO CONQUERED!";
-                stageBannerSub.textContent = "RESTORED TO FULL 3 HEARTS! PREPARE FOR BOSS!";
-            } else {
-                stageBannerText.textContent = `STAGE ${currentStage} CLEARED!`;
-                stageBannerSub.textContent = "+0.5 HEART RESTORED!";
-            }
-
-            stageBanner.classList.remove('translate-x-full');
-
-            setTimeout(() => {
-                stageBanner.classList.add('translate-x-full');
-                loadStage(nextStage);
-                gameState = 'PLAYING';
-                lastTime = performance.now();
+            if (gameState === 'PLAYING') {
                 requestAnimationFrame(gameLoop);
-            }, 2500);
+            }
         }
 
         function triggerVictory() {
@@ -1500,6 +2031,7 @@
             if (scoreText) scoreText.textContent = "0";
             menuOverlay.classList.add('hidden');
             statsSummary.classList.add('hidden');
+            cutsceneOverlay.classList.add('hidden');
 
             loadStage(1);
             gameState = 'PLAYING';
@@ -1511,7 +2043,6 @@
             keys[e.code] = true;
             if (['Space', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
 
-            // Toggle Pause on P or ESC press during active gameplay or pause
             if ((e.code === 'KeyP' || e.code === 'Escape') && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
                 togglePause();
             }
@@ -1553,9 +2084,11 @@
             requestAnimationFrame(gameLoop);
         });
 
+        cutsceneRestartBtn.addEventListener('click', startGame);
+
         muteBtn.addEventListener('click', () => {
             audio.muted = !audio.muted;
-            muteBtn.textContent = audio.muted ? "🔇 MUTED" : "🔊 MUSIC";
+            muteBtn.textContent = audio.muted ? "关 MUTED" : "🔊 MUSIC";
         });
     </script>
 </body>
