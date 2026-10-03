@@ -53,7 +53,7 @@
         <div class="w-full flex justify-between items-center z-10 text-[9px] sm:text-xs px-2 sm:px-3 py-2 bg-slate-900/90 rounded border-2 border-amber-600/40 gap-1">
             <div class="flex items-center space-x-2">
                 <button id="pauseBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] sm:text-[10px] text-amber-300 hover:bg-gray-700 rounded">⏸️ PAUSE [P]</button>
-                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <div class="flex items-center space-x-1 sm:space-x-2" data-cs-hide>
                     <span class="text-amber-400">HP:</span>
                     <div id="heartsContainer" class="flex space-x-1 text-sm sm:text-base items-center">
                         <!-- Dynamic Hearts via JS -->
@@ -62,7 +62,7 @@
             </div>
 
             <!-- Shield Indicator HUD -->
-            <div class="flex items-center space-x-1 sm:space-x-2 bg-cyan-950/80 border border-cyan-500/60 px-2 py-1 rounded">
+            <div class="flex items-center space-x-1 sm:space-x-2 bg-cyan-950/80 border border-cyan-500/60 px-2 py-1 rounded" data-cs-hide>
                 <span id="shieldHudText" class="text-cyan-300 font-bold glow-cyan">🛡️ SHIELD: READY [J]</span>
                 <div class="w-10 sm:w-16 bg-gray-900 h-2 sm:h-3 border border-cyan-600 relative overflow-hidden hidden" id="shieldCdContainer">
                     <div id="shieldCdBar" class="bg-cyan-400 h-full w-0"></div>
@@ -70,12 +70,12 @@
             </div>
 
             <!-- Stage Label -->
-            <div class="hidden sm:flex items-center space-x-2">
+            <div class="hidden sm:flex items-center space-x-2" data-cs-hide>
                 <span id="stageLabel" class="text-cyan-400 glow-cyan">STAGE 1: CITADEL</span>
             </div>
 
             <!-- Score & Combo Counter HUD -->
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-2" data-cs-hide>
                 <div class="hidden sm:flex items-center space-x-1 bg-slate-950/80 border border-amber-500/60 px-2 py-1 rounded">
                     <span class="text-amber-400 font-bold">SCORE:</span>
                     <span id="scoreText" class="text-amber-200 font-bold">0</span>
@@ -89,7 +89,7 @@
         </div>
 
         <!-- Boss HP Bar (Visible on Stage 5) -->
-        <div id="bossBarContainer" class="hidden w-full bg-red-950/90 border-2 border-red-600 rounded p-1.5 z-10 my-1 text-center">
+        <div id="bossBarContainer" class="hidden w-full bg-red-950/90 border-2 border-red-600 rounded p-1.5 z-10 my-1 text-center" data-cs-hide>
             <div class="flex justify-between items-center text-[9px] sm:text-xs text-red-400 font-bold mb-1 px-1">
                 <span class="glow-red">👹 DEMON LORD KHAL'GORATH</span>
                 <span id="bossHpText" class="text-amber-300">300 / 300 HP</span>
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Controls HUD Bar -->
-        <div class="w-full bg-red-950/90 border-x-2 border-b-2 border-amber-500/80 text-[8px] sm:text-[10px] py-1.5 px-2.5 flex flex-wrap justify-between items-center text-amber-200 z-10 rounded-b shadow-md gap-y-1">
+        <div class="w-full bg-red-950/90 border-x-2 border-b-2 border-amber-500/80 text-[8px] sm:text-[10px] py-1.5 px-2.5 flex flex-wrap justify-between items-center text-amber-200 z-10 rounded-b shadow-md gap-y-1" data-cs-hide>
             <div class="flex items-center space-x-1.5 font-bold flex-wrap gap-y-1">
                 <span class="bg-red-600 text-white px-1.5 py-0.5 rounded border border-yellow-300">⚔ ATK: Z/X/Click</span>
                 <span class="bg-cyan-600 text-white px-1.5 py-0.5 rounded border border-cyan-300">🛡️ SHIELD: J</span>
@@ -119,7 +119,7 @@
             <canvas id="gameCanvas" class="w-full h-full object-contain cursor-crosshair"></canvas>
 
             <!-- Pause Overlay Menu -->
-            <div id="pauseOverlay" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-30 p-6 text-center">
+            <div id="pauseOverlay" class="hidden absolute inset-0 bg-black/80 backdrop-blur-sm flex flex-col items-center justify-center z-50 p-6 text-center">
                 <h2 class="text-2xl sm:text-3xl text-amber-400 glow-orange mb-4">GAME PAUSED</h2>
                 <div class="flex flex-col gap-3 min-w-[200px]">
                     <button id="resumeBtn" class="retro-btn px-6 py-2.5 text-amber-100 font-bold text-xs sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">
@@ -162,26 +162,23 @@
                 <p id="stageBannerSub" class="text-[10px] text-red-300 mt-1">+1 HEART RESTORED!</p>
             </div>
 
-            <!-- Full-screen Boofemo ending dialogue; the HUD above remains visible for Pause. -->
-            <div id="cutsceneOverlay" class="hidden absolute inset-x-0 bottom-0 top-[50px] sm:top-[58px] bg-black z-40 p-3 sm:p-8">
-                <div class="relative flex h-full w-full items-center justify-center gap-4 sm:gap-12">
-                    <div class="flex w-[42%] h-full items-center justify-end">
-                        <div class="flex flex-col items-center gap-3">
-                            <img src="/__l5e/assets-v1/89a127d3-0cab-47d5-8f0b-e10a19c249fd/boofemo.png" alt="Boofemo" class="w-32 sm:w-56 lg:w-72 max-h-[62vh] object-contain [image-rendering:pixelated]" />
-                            <p class="text-cyan-300 text-xs sm:text-lg glow-cyan">BOOFEMO</p>
+            <!-- Full-screen Boofemo dialogue scene: everything else is wiped; only the Pause button stays above it. -->
+            <div id="cutsceneOverlay" class="hidden absolute inset-0 bg-black z-40 opacity-0 transition-opacity duration-1000">
+                <div class="relative flex h-full w-full items-center justify-center gap-4 sm:gap-10 px-3 sm:px-10">
+                    <div class="flex w-[36%] sm:w-[38%] h-full items-end justify-center pb-3 sm:pb-6">
+                        <div class="flex flex-col items-center gap-2 w-full h-full">
+                            <img src="/__l5e/assets-v1/89a127d3-0cab-47d5-8f0b-e10a19c249fd/boofemo.png" alt="Boofemo" class="flex-1 min-h-0 w-full object-contain [image-rendering:pixelated]" />
+                            <p class="text-cyan-300 text-xs sm:text-2xl glow-cyan font-bold">BOOFEMO</p>
                         </div>
                     </div>
 
-                    <div class="flex w-[58%] h-full flex-col items-start justify-center gap-5">
-                        <div class="relative max-w-xl bg-amber-100 text-black font-bold text-sm sm:text-2xl leading-relaxed px-5 py-5 sm:px-8 sm:py-8 border-4 border-amber-600 shadow-[0_0_30px_rgba(255,200,0,0.45)]">
-                            “Woah! You did it!”
-                            <div class="absolute top-1/2 -left-4 -translate-y-1/2 w-0 h-0 border-y-[14px] border-y-transparent border-r-[16px] border-r-amber-100"></div>
+                    <div class="flex w-[60%] sm:w-[58%] h-full flex-col items-start justify-center gap-5 sm:gap-8">
+                        <div class="relative w-full bg-amber-100 text-black font-bold text-lg sm:text-3xl leading-relaxed px-5 py-6 sm:px-10 sm:py-12 border-4 border-amber-600 shadow-[0_0_40px_rgba(255,200,0,0.5)] min-h-[32vh] sm:min-h-[36vh] flex items-center">
+                            <span id="dialogueText">“Woah! You did it!”</span>
+                            <div class="absolute top-1/2 -left-4 -translate-y-1/2 w-0 h-0 border-y-[14px] sm:border-y-[20px] border-y-transparent border-r-[16px] sm:border-r-[22px] border-r-amber-100"></div>
                         </div>
-                        <div class="text-[8px] sm:text-xs space-y-2 text-amber-300">
-                            <p>FINAL SCORE: <span id="cutsceneScore" class="text-white font-bold">0</span></p>
-                            <p>TIME TAKEN: <span id="cutsceneTime" class="text-white font-bold">0s</span></p>
-                        </div>
-                        <button id="cutsceneRestartBtn" class="retro-btn px-5 py-2.5 text-amber-100 font-bold text-[9px] sm:text-xs rounded cursor-pointer transform hover:scale-105 transition-transform">
+                        <div id="dialogueNext" class="text-amber-300 text-[9px] sm:text-base font-bold animate-pulse">CLICK / [SPACE] ▶ NEXT</div>
+                        <button id="cutsceneRestartBtn" class="hidden retro-btn px-6 py-3 text-amber-100 font-bold text-[9px] sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">
                             PLAY AGAIN
                         </button>
                     </div>
@@ -190,7 +187,7 @@
         </div>
 
         <!-- Mobile Touch Controls -->
-        <div class="w-full flex justify-between items-center sm:hidden z-10 px-1 pt-1">
+        <div class="w-full flex justify-between items-center sm:hidden z-10 px-1 pt-1" data-cs-hide>
             <div class="flex space-x-1">
                 <button id="tLeft" class="w-10 h-10 bg-gray-900 border-2 border-amber-600/60 rounded flex items-center justify-center text-amber-400 text-base active:bg-amber-700">◀</button>
                 <button id="tRight" class="w-10 h-10 bg-gray-900 border-2 border-amber-600/60 rounded flex items-center justify-center text-amber-400 text-base active:bg-amber-700">▶</button>
@@ -375,8 +372,8 @@
         const restartBtn = document.getElementById('restartBtn');
 
         const cutsceneOverlay = document.getElementById('cutsceneOverlay');
-        const cutsceneScore = document.getElementById('cutsceneScore');
-        const cutsceneTime = document.getElementById('cutsceneTime');
+        const dialogueText = document.getElementById('dialogueText');
+        const dialogueNext = document.getElementById('dialogueNext');
         const cutsceneRestartBtn = document.getElementById('cutsceneRestartBtn');
         // Image loader for Boofemo character with automatic fallback
         const boofemoImg = new Image();
@@ -407,8 +404,13 @@
         let cameraY = 0;
 
         // Cutscene Timers & Phase State
-        let cutscenePhase = 'NONE'; // 'NONE', 'WAIT_10S', 'SHOW_BOOFEMO', 'BLACK_SCREEN'
+        let cutscenePhase = 'NONE'; // 'NONE', 'WAIT_10S', 'SHOW_BOOFEMO', 'DIALOGUE'
         let cutsceneTimer = 0;
+        let dialogueIdx = 0;
+        // Boofemo's dialogue plays one phase at a time; add lines here to extend the scene.
+        const BOOFEMO_DIALOGUE = [
+            "Woah! You did it!"
+        ];
         let boofemoPos = { x: 240, y: 188 };
 
         // Combo & Combo Heal System
@@ -1566,6 +1568,8 @@
             cutsceneOverlay.classList.add('hidden');
             cutscenePhase = 'NONE';
             cutsceneTimer = 0;
+            // Bring back any HUD widgets hidden by the ending dialogue.
+            document.querySelectorAll('[data-cs-hide]').forEach(el => { el.style.display = ''; });
 
             activeCheckpoint = { stage: stageNum, x: 40, y: 180 };
 
@@ -1727,17 +1731,37 @@
             }, 1800);
         }
 
+        function advanceDialogue() {
+            if (cutscenePhase !== 'DIALOGUE' || gameState !== 'VICTORY') return;
+            dialogueIdx++;
+            if (dialogueIdx >= BOOFEMO_DIALOGUE.length) {
+                dialogueNext.classList.add('hidden');
+                cutsceneRestartBtn.classList.remove('hidden');
+                return;
+            }
+            dialogueText.textContent = `\u201C${BOOFEMO_DIALOGUE[dialogueIdx]}\u201D`;
+        }
+
+        let pausedFrom = 'PLAYING';
+
         function togglePause() {
             if (gameState === 'PLAYING') {
+                pausedFrom = 'PLAYING';
                 gameState = 'PAUSED';
                 pauseOverlay.classList.remove('hidden');
                 audio.stopChiptune();
+            } else if (gameState === 'VICTORY' && cutscenePhase === 'DIALOGUE') {
+                pausedFrom = 'VICTORY';
+                gameState = 'PAUSED';
+                pauseOverlay.classList.remove('hidden');
             } else if (gameState === 'PAUSED') {
                 pauseOverlay.classList.add('hidden');
-                gameState = 'PLAYING';
-                audio.startChiptune(currentStage);
-                lastTime = performance.now();
-                requestAnimationFrame(gameLoop);
+                gameState = pausedFrom;
+                if (gameState === 'PLAYING') {
+                    audio.startChiptune(currentStage);
+                    lastTime = performance.now();
+                    requestAnimationFrame(gameLoop);
+                }
             }
         }
 
@@ -1769,13 +1793,19 @@
                 }
 
                 if (cutsceneTimer <= 0) {
-                    cutscenePhase = 'BLACK_SCREEN';
+                    cutscenePhase = 'DIALOGUE';
                     gameState = 'VICTORY';
                     audio.stopChiptune();
 
-                    cutsceneScore.textContent = score;
-                    cutsceneTime.textContent = `${Math.floor(gameTime)}s`;
+                    // Wipe the screen: hide every HUD widget and the controls bar (Pause button stays).
+                    document.querySelectorAll('[data-cs-hide]').forEach(el => { el.style.display = 'none'; });
+
+                    dialogueIdx = 0;
+                    dialogueText.textContent = `\u201C${BOOFEMO_DIALOGUE[0]}\u201D`;
+                    dialogueNext.classList.remove('hidden');
+                    cutsceneRestartBtn.classList.add('hidden');
                     cutsceneOverlay.classList.remove('hidden');
+                    requestAnimationFrame(() => cutsceneOverlay.classList.remove('opacity-0'));
                     return;
                 }
             }
@@ -2024,6 +2054,7 @@
             if (scoreText) scoreText.textContent = "0";
             menuOverlay.classList.add('hidden');
             statsSummary.classList.add('hidden');
+            cutsceneOverlay.classList.add('opacity-0');
             cutsceneOverlay.classList.add('hidden');
 
             loadStage(1);
@@ -2036,8 +2067,11 @@
             keys[e.code] = true;
             if (['Space', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
 
-            if ((e.code === 'KeyP' || e.code === 'Escape') && (gameState === 'PLAYING' || gameState === 'PAUSED')) {
+            if ((e.code === 'KeyP' || e.code === 'Escape') && (gameState === 'PLAYING' || gameState === 'PAUSED' || gameState === 'VICTORY')) {
                 togglePause();
+            }
+            if ((e.code === 'Space' || e.code === 'Enter') && gameState === 'VICTORY' && cutscenePhase === 'DIALOGUE' && !e.repeat) {
+                advanceDialogue();
             }
         });
         window.addEventListener('keyup', e => { keys[e.code] = false; });
@@ -2078,10 +2112,11 @@
         });
 
         cutsceneRestartBtn.addEventListener('click', startGame);
+        cutsceneOverlay.addEventListener('click', advanceDialogue);
 
         muteBtn.addEventListener('click', () => {
             audio.muted = !audio.muted;
-            muteBtn.textContent = audio.muted ? "关 MUTED" : "🔊 MUSIC";
+            muteBtn.textContent = audio.muted ? "🔇 MUTED" : "🔊 MUSIC";
         });
     </script>
 </body>
