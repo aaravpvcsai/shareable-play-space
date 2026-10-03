@@ -1,6 +1,6 @@
 # Roadmap
 
 - [x] Add game HTML to project and serve it at /
-- [x] Swap in new complete game file (TheKnight_sInferno.html)
+- [x] Swap in latest complete game file (knight_sinfernonew.html)
 - [x] Verify game loads in preview with working keyboard/mouse controls
-- [x] Publish to a shareable URL
+- [ ] Keep unpublished until requested
