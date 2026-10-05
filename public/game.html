@@ -86,6 +86,10 @@
                 </div>
                 <button id="muteBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] text-amber-300 hover:bg-gray-700">🔊 MUSIC</button>
             </div>
+            <div id="magmaCounter" class="hidden flex items-center space-x-1 bg-orange-950/80 border border-orange-500/70 px-2 py-1 rounded">
+                <span class="text-orange-400 font-bold glow-orange">🔥 MAGMA TOKENS:</span>
+                <span id="magmaText" class="text-orange-200 font-bold">0</span>
+            </div>
         </div>
 
         <!-- Boss HP Bar (Visible on Stage 5) -->
@@ -178,6 +182,10 @@
                             <div class="absolute top-1/2 -left-4 -translate-y-1/2 w-0 h-0 border-y-[14px] sm:border-y-[20px] border-y-transparent border-r-[16px] sm:border-r-[22px] border-r-amber-100"></div>
                         </div>
                         <div id="dialogueNext" class="text-amber-300 text-[9px] sm:text-base font-bold animate-pulse">CLICK / [SPACE] ▶ NEXT</div>
+                        <div id="dialogueChoices" class="hidden flex flex-wrap gap-3 sm:gap-6">
+                            <button id="choiceReplayBtn" class="retro-btn px-5 py-3 text-amber-100 font-bold text-[9px] sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">↻ REPLAY LEVEL</button>
+                            <button id="choiceContinueBtn" class="retro-btn px-5 py-3 text-amber-100 font-bold text-[9px] sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">▶ NEXT STAGE</button>
+                        </div>
                         <button id="cutsceneRestartBtn" class="hidden retro-btn px-6 py-3 text-amber-100 font-bold text-[9px] sm:text-sm rounded cursor-pointer transform hover:scale-105 transition-transform">
                             PLAY AGAIN
                         </button>
@@ -407,9 +415,36 @@
         let cutscenePhase = 'NONE'; // 'NONE', 'CELEBRATE', 'SHOW_BOOFEMO', 'DIALOGUE'
         let cutsceneTimer = 0;
         let dialogueIdx = 0;
-        // Boofemo's dialogue plays one phase at a time; add lines here to extend the scene.
+        let dialogueLines = [];
+        let dialogueDone = null;
+        let awaitingChoice = false;
+        let choiceSet = 'first';
+        let isReplayRun = false;
+        let tookDamageThisRun = false;
+        let magmaTokens = 0;
+        const dialogueChoices = document.getElementById('dialogueChoices');
+        const choiceReplayBtn = document.getElementById('choiceReplayBtn');
+        const choiceContinueBtn = document.getElementById('choiceContinueBtn');
+        const magmaCounter = document.getElementById('magmaCounter');
+        const magmaText = document.getElementById('magmaText');
+        // Boofemo's first-ending dialogue, one speech bubble per line.
         const BOOFEMO_DIALOGUE = [
-            "Woah! You did it!"
+            "Woah! You did it!",
+            "Are you okay friend? You're acting like you don't know me.",
+            "Wait, what has happened to you?!",
+            "It appears that you have lost your memory",
+            "We must work together to find out how to bring it back!",
+            "But first, let me remind you of who I am.",
+            "I am Boofemo and I am your friend. I am the soul that makes your sword.",
+            "My power is manifested in it, meaning if anything bad happened to that sword, it would happen to me.",
+            "So please, try to handle it carefully.",
+            "What's this green thing under me?",
+            "Oh! That's just my resting support.",
+            "Since I don't have a physical body, this is what allows me to communicate with you and be visible.",
+            "Well then, we should get going on our journey.",
+            "You can choose to replay this level without taking any damage to get some 'special' resources.",
+            "Or, you can continue with me to the next stage.",
+            "You can always come back to this level if you want!"
         ];
         let boofemoPos = { x: 240, y: 188 };
 
@@ -1052,6 +1087,7 @@
                 }
 
                 this.hearts -= 0.5;
+                tookDamageThisRun = true;
                 this.renderHearts();
                 this.invulnerableTimer = 1.25;
                 this.vy = -150;
@@ -1731,15 +1767,90 @@
             }, 1800);
         }
 
+        // Plays a list of lines one bubble at a time, then runs onDone.
+        function playDialogue(lines, onDone) {
+            dialogueLines = lines;
+            dialogueIdx = 0;
+            dialogueDone = onDone;
+            awaitingChoice = false;
+            dialogueChoices.classList.add('hidden');
+            cutsceneRestartBtn.classList.add('hidden');
+            dialogueNext.classList.remove('hidden');
+            dialogueText.textContent = `\u201C${lines[0]}\u201D`;
+        }
+
+        function showChoices(set) {
+            awaitingChoice = true;
+            choiceSet = set;
+            dialogueNext.classList.add('hidden');
+            dialogueChoices.classList.remove('hidden');
+        }
+
+        function startEndingDialogue() {
+            if (!isReplayRun) {
+                playDialogue(BOOFEMO_DIALOGUE, () => showChoices('first'));
+            } else if (tookDamageThisRun) {
+                playDialogue(["It's okay! You did your best!"], () => showChoices('failed'));
+            } else {
+                magmaTokens += 5;
+                updateMagmaHUD();
+                playDialogue([
+                    "WOW! You did it without taking any damage! Here are 5 Magma Tokens for your hard work!",
+                    "So...do you want more tokens to prove your might or shall we continue to the next stage?"
+                ], () => showChoices('success'));
+            }
+        }
+
+        const CHOICE_REPLIES = {
+            first:   { replay: "Great! Let's try this again now that we know each other!", continue: "Alright! We got this!" },
+            failed:  { replay: "Awesome! I'll be even stronger this time!", continue: "I understand! We can still perform INCREDIBLY for this next one!" },
+            success: { replay: "Haha! I admire your resilience! Let's go again", continue: "Nice! These tokens will prove useful for the next challenges!" }
+        };
+
+        function chooseOption(option) {
+            if (!awaitingChoice) return;
+            const line = CHOICE_REPLIES[choiceSet][option];
+            playDialogue([line], option === 'replay' ? replayLevel : continueToNextStage);
+        }
+
+        function replayLevel() {
+            isReplayRun = true;
+            tookDamageThisRun = false;
+            cutsceneOverlay.classList.add('opacity-0');
+            loadStage(currentStage);
+            player.fullHeal();
+            audio.startChiptune(currentStage);
+            gameState = 'PLAYING';
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function continueToNextStage() {
+            // No next stage exists yet; show a placeholder with a way to restart.
+            dialogueLines = [];
+            dialogueDone = null;
+            dialogueText.textContent = "NEXT STAGE COMING SOON...";
+            dialogueNext.classList.add('hidden');
+            cutsceneRestartBtn.classList.remove('hidden');
+        }
+
+        function updateMagmaHUD() {
+            magmaCounter.classList.toggle('hidden', magmaTokens <= 0);
+            magmaText.textContent = magmaTokens;
+        }
+
         function advanceDialogue() {
-            if (cutscenePhase !== 'DIALOGUE' || gameState !== 'VICTORY') return;
+            if (cutscenePhase !== 'DIALOGUE' || gameState !== 'VICTORY' || awaitingChoice) return;
+            if (!dialogueLines.length) return;
             dialogueIdx++;
-            if (dialogueIdx >= BOOFEMO_DIALOGUE.length) {
-                dialogueNext.classList.add('hidden');
-                cutsceneRestartBtn.classList.remove('hidden');
+            if (dialogueIdx >= dialogueLines.length) {
+                const done = dialogueDone;
+                dialogueDone = null;
+                dialogueIdx = dialogueLines.length - 1;
+                if (done) done();
                 return;
             }
-            dialogueText.textContent = `\u201C${BOOFEMO_DIALOGUE[dialogueIdx]}\u201D`;
+            dialogueText.textContent = `\u201C${dialogueLines[dialogueIdx]}\u201D`;
         }
 
         let pausedFrom = 'PLAYING';
@@ -1799,10 +1910,8 @@
                     // Wipe the screen: hide every HUD widget and the controls bar (Pause button stays).
                     document.querySelectorAll('[data-cs-hide]').forEach(el => { el.style.display = 'none'; });
 
-                    dialogueIdx = 0;
-                    dialogueText.textContent = `\u201C${BOOFEMO_DIALOGUE[0]}\u201D`;
-                    dialogueNext.classList.remove('hidden');
                     cutsceneRestartBtn.classList.add('hidden');
+                    startEndingDialogue();
                     cutsceneOverlay.classList.remove('hidden');
                     requestAnimationFrame(() => cutsceneOverlay.classList.remove('opacity-0'));
                     return;
@@ -2110,7 +2219,9 @@
             requestAnimationFrame(gameLoop);
         });
 
-        cutsceneRestartBtn.addEventListener('click', startGame);
+        cutsceneRestartBtn.addEventListener('click', (e) => { e.stopPropagation(); startGame(); });
+        choiceReplayBtn.addEventListener('click', (e) => { e.stopPropagation(); chooseOption('replay'); });
+        choiceContinueBtn.addEventListener('click', (e) => { e.stopPropagation(); chooseOption('continue'); });
         cutsceneOverlay.addEventListener('click', advanceDialogue);
 
         muteBtn.addEventListener('click', () => {
