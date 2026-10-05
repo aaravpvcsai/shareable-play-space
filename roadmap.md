@@ -5,5 +5,6 @@
 - [x] Verify game loads in preview with working keyboard/mouse controls
 - [x] Replace the ending dialogue character with Boofemo and a full-screen layout
 - [x] Rebuild ending as phased Boofemo dialogue (screen wiped except Boofemo, dialogue, Pause)
+- [x] Shorten victory celebration to 5s and remove the countdown line
 - [ ] Add Boofemo's dialogue lines once the user provides them
 - [ ] Keep unpublished until requested
