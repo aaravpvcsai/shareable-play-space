@@ -404,7 +404,7 @@
         let cameraY = 0;
 
         // Cutscene Timers & Phase State
-        let cutscenePhase = 'NONE'; // 'NONE', 'WAIT_10S', 'SHOW_BOOFEMO', 'DIALOGUE'
+        let cutscenePhase = 'NONE'; // 'NONE', 'CELEBRATE', 'SHOW_BOOFEMO', 'DIALOGUE'
         let cutsceneTimer = 0;
         let dialogueIdx = 0;
         // Boofemo's dialogue plays one phase at a time; add lines here to extend the scene.
@@ -1688,10 +1688,10 @@
         }
 
         function startPostBossCutscene() {
-            cutscenePhase = 'WAIT_10S';
-            cutsceneTimer = 10.0;
+            cutscenePhase = 'CELEBRATE';
+            cutsceneTimer = 5.0;
             stageBannerText.textContent = "BOSS DEFEATED!";
-            stageBannerSub.textContent = "REALM SAVED! SECURING ARENA (10s)...";
+            stageBannerSub.textContent = "REALM SAVED! SECURING ARENA...";
             stageBanner.classList.remove('translate-x-full');
             audio.playVictory();
         }
@@ -1772,9 +1772,8 @@
             lastTime = timestamp;
             gameTime += dt;
 
-            if (cutscenePhase === 'WAIT_10S') {
+            if (cutscenePhase === 'CELEBRATE') {
                 cutsceneTimer -= dt;
-                stageBannerSub.textContent = `CELEBRATING VICTORY... (${Math.max(1, Math.ceil(cutsceneTimer))}s)`;
                 
                 if (cutsceneTimer <= 0) {
                     cutscenePhase = 'SHOW_BOOFEMO';
