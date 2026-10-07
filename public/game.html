@@ -1817,9 +1817,9 @@
             isReplayRun = true;
             tookDamageThisRun = false;
             cutsceneOverlay.classList.add('opacity-0');
-            loadStage(currentStage);
+            loadStage(1);
             player.fullHeal();
-            audio.startChiptune(currentStage);
+            audio.startChiptune(1);
             gameState = 'PLAYING';
             lastTime = performance.now();
             requestAnimationFrame(gameLoop);
