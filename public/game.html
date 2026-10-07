@@ -421,6 +421,8 @@
         let choiceSet = 'first';
         let isReplayRun = false;
         let tookDamageThisRun = false;
+        let enemiesKilledThisRun = 0;
+        let enemiesSpawnedThisRun = 0;
         let magmaTokens = 0;
         const dialogueChoices = document.getElementById('dialogueChoices');
         const choiceReplayBtn = document.getElementById('choiceReplayBtn');
@@ -939,7 +941,7 @@
                     this.shieldCooldown -= dt;
                     if (this.shieldCooldown <= 0) {
                         this.shieldCooldown = 0;
-                        this.activateShield();
+                        this.updateShieldHUD();
                     } else {
                         this.updateShieldHUD();
                     }
@@ -1716,9 +1718,11 @@
                 platforms.push(new Platform(320, 160, 80, 15, 'obsidian'));
 
                 boss = new DemonBoss(360, 156);
+                enemiesSpawnedThisRun++;
                 audio.startChiptune(5);
             }
 
+            enemiesSpawnedThisRun += enemies.length;
             player.reset(activeCheckpoint.x, activeCheckpoint.y);
             player.fullHeal();
         }
@@ -1789,7 +1793,7 @@
         function startEndingDialogue() {
             if (!isReplayRun) {
                 playDialogue(BOOFEMO_DIALOGUE, () => showChoices('first'));
-            } else if (tookDamageThisRun) {
+            } else if (tookDamageThisRun || enemiesKilledThisRun < enemiesSpawnedThisRun) {
                 playDialogue(["It's okay! You did your best!"], () => showChoices('failed'));
             } else {
                 magmaTokens += 5;
@@ -1816,6 +1820,8 @@
         function replayLevel() {
             isReplayRun = true;
             tookDamageThisRun = false;
+            enemiesKilledThisRun = 0;
+            enemiesSpawnedThisRun = 0;
             cutsceneOverlay.classList.add('opacity-0');
             loadStage(1);
             player.fullHeal();
@@ -2003,6 +2009,7 @@
 
                         if (enemy.hp <= 0) {
                             enemy.dead = true;
+                            enemiesKilledThisRun++;
                             score += enemy.type === 'imp' ? 150 : 100;
                             if (scoreText) scoreText.textContent = score;
                         }
@@ -2041,6 +2048,7 @@
 
                         if (boss.hp <= 0) {
                             boss.dead = true;
+                            enemiesKilledThisRun++;
                             score += 1000;
                             if (scoreText) scoreText.textContent = score;
                             startPostBossCutscene();
@@ -2156,6 +2164,8 @@
             audio.init();
             isReplayRun = false;
             tookDamageThisRun = false;
+            enemiesKilledThisRun = 0;
+            enemiesSpawnedThisRun = 0;
             score = 0;
             gameTime = 0;
             comboCount = 0;
