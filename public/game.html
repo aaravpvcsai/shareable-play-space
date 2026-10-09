@@ -1024,7 +1024,7 @@
 
                 this.x += this.vx * dt;
                 platforms.forEach(p => {
-                    if (p.broken) return;
+                    if (p.broken || p.type === 'mountain') return;
                     if (this.checkCollision(this, p)) {
                         // Prevent vertical moving platforms rising UP from triggering false horizontal side pushes
                         const isStandingOnTop = (this.y + this.height) <= (p.y + 6);
@@ -1040,6 +1040,7 @@
                 this.y += this.vy * dt;
                 platforms.forEach(p => {
                     if (p.broken) return;
+                    if (p.type === 'mountain' && (this.vy < 0 || this.y + this.height - this.vy * dt > p.y + 2)) return;
                     if (this.checkCollision(this, p)) {
                         if (this.vy >= 0 && (this.y + this.height - this.vy * dt) <= p.y + 12) {
                             this.y = p.y - this.height;
