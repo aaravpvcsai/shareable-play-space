@@ -1024,7 +1024,7 @@
 
                 this.x += this.vx * dt;
                 platforms.forEach(p => {
-                    if (p.broken) return;
+                    if (p.broken || p.type === 'mountain') return;
                     if (this.checkCollision(this, p)) {
                         // Prevent vertical moving platforms rising UP from triggering false horizontal side pushes
                         const isStandingOnTop = (this.y + this.height) <= (p.y + 6);
@@ -1040,6 +1040,7 @@
                 this.y += this.vy * dt;
                 platforms.forEach(p => {
                     if (p.broken) return;
+                    if (p.type === 'mountain' && (this.vy < 0 || this.y + this.height - this.vy * dt > p.y + 2)) return;
                     if (this.checkCollision(this, p)) {
                         if (this.vy >= 0 && (this.y + this.height - this.vy * dt) <= p.y + 12) {
                             this.y = p.y - this.height;
@@ -1174,7 +1175,9 @@
                 const drawX = this.x + this.shake;
                 const drawY = this.y;
 
-                if (this.type === 'stone') {
+                if (this.type === 'mountain') {
+                    MountainLevel.drawPlatform(ctx, this);
+                } else if (this.type === 'stone') {
                     drawPixelRect(ctx, '#3a3d40', drawX, drawY, this.w, this.h);
                     drawPixelRect(ctx, '#585c61', drawX, drawY, this.w, 3);
                 } else if (this.type === 'obsidian' || this.type === 'moving' || this.type === 'sinking') {
@@ -1607,6 +1610,12 @@
             projectiles = [];
             particles = [];
             boss = null;
+            cameraX = 0;
+            cameraY = 0;
+            keys = {};
+            previousKeys = {};
+            choiceReplayBtn.textContent = '↻ REPLAY LEVEL';
+            choiceContinueBtn.textContent = '▶ NEXT STAGE';
             bossBarContainer.classList.add('hidden');
             cutsceneOverlay.classList.add('hidden');
             cutscenePhase = 'NONE';
@@ -1725,6 +1734,12 @@
                 boss = new DemonBoss(360, 156);
                 enemiesSpawnedThisRun++;
                 audio.startChiptune(5);
+            } else if (stageNum === 6) {
+                stageLabel.textContent = 'THE SUNLIT SUMMIT';
+                stageLabel.className = 'text-cyan-300 glow-cyan';
+                lavaHeight = 1000;
+                MountainLevel.build();
+                audio.startChiptune(6);
             }
 
             enemiesSpawnedThisRun += enemies.length;
@@ -1817,6 +1832,15 @@
         };
 
         function chooseOption(option) {
+            if (currentStage === 6 && MountainLevel.completed) {
+                cutsceneOverlay.classList.add('opacity-0');
+                if (option === 'continue') { startGame(); return; }
+                loadStage(6);
+                gameState = 'PLAYING';
+                lastTime = performance.now();
+                requestAnimationFrame(gameLoop);
+                return;
+            }
             if (!awaitingChoice) return;
             const line = CHOICE_REPLIES[choiceSet][option];
             playDialogue([line], option === 'replay' ? replayLevel : continueToNextStage);
@@ -1837,12 +1861,14 @@
         }
 
         function continueToNextStage() {
-            // No next stage exists yet; show a placeholder with a way to restart.
+            isReplayRun = false;
             dialogueLines = [];
             dialogueDone = null;
-            dialogueText.textContent = "NEXT STAGE COMING SOON...";
-            dialogueNext.classList.add('hidden');
-            cutsceneRestartBtn.classList.remove('hidden');
+            cutsceneOverlay.classList.add('opacity-0');
+            loadStage(6);
+            gameState = 'PLAYING';
+            lastTime = performance.now();
+            requestAnimationFrame(gameLoop);
         }
 
         function updateMagmaHUD() {
@@ -1955,7 +1981,12 @@
 
             player.update(dt, platforms);
 
-            if (cutscenePhase !== 'SHOW_BOOFEMO') {
+            if (currentStage === 6) {
+                cameraX += (Math.max(0, Math.min(240, player.x - V_WIDTH / 2)) - cameraX) * 0.1;
+                cameraY += (Math.max(0, Math.min(450, player.y - V_HEIGHT * 0.6)) - cameraY) * 0.12;
+                MountainLevel.update();
+                if (gameState !== 'PLAYING') return;
+            } else if (cutscenePhase !== 'SHOW_BOOFEMO') {
                 cameraX += (player.x - V_WIDTH / 3 - cameraX) * 0.1;
                 cameraY += (player.y - V_HEIGHT / 2 - cameraY) * 0.1;
                 cameraY = Math.max(0, cameraY);
@@ -1965,7 +1996,7 @@
                 cameraY += (boofemoPos.y - V_HEIGHT / 2 - cameraY) * 0.1;
             }
 
-            if (player.y > V_HEIGHT + 30) {
+            if (currentStage !== 6 && player.y > V_HEIGHT + 30) {
                 audio.playLava();
                 handlePlayerDeath();
                 return;
@@ -1981,7 +2012,7 @@
                 }
             }
 
-            if (Math.random() < 0.3) {
+            if (currentStage !== 6 && Math.random() < 0.3) {
                 particles.push(new Particle(cameraX + Math.random() * V_WIDTH, cameraY + V_HEIGHT, [2, 3, 4, 5].includes(currentStage) ? '#ff4400' : '#444466'));
             }
 
@@ -2088,10 +2119,14 @@
             ctx.save();
             ctx.translate(-Math.floor(cameraX), -Math.floor(cameraY));
 
+            if (currentStage === 6) {
+                MountainLevel.drawBackground(ctx, gameTime);
+            } else {
             if (currentStage === 1) ctx.fillStyle = '#0f0c1b';
             else if (currentStage === 5) ctx.fillStyle = '#1c0303';
             else ctx.fillStyle = '#220505';
             ctx.fillRect(cameraX, cameraY, V_WIDTH, V_HEIGHT);
+            }
 
             platforms.forEach(p => p.draw(ctx));
             fireBarriers.forEach(fb => fb.draw(ctx));
@@ -2122,6 +2157,7 @@
                 ctx.fillRect(cameraX, lavaHeight, V_WIDTH, 2);
             }
 
+            if (currentStage === 6) MountainLevel.drawDetails(ctx, gameTime);
             enemies.forEach(e => e.draw(ctx));
             if (boss && !boss.dead) boss.draw(ctx);
 
@@ -2246,5 +2282,6 @@
             muteBtn.textContent = audio.muted ? "🔇 MUTED" : "🔊 MUSIC";
         });
     </script>
+    <script src="/mountain.js"></script>
 </body>
 </html>
