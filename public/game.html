@@ -61,7 +61,7 @@
     <div class="relative w-full max-w-5xl h-full max-h-[820px] flex flex-col items-center justify-between border-4 border-amber-900/60 rounded-lg bg-black/90 shadow-[0_0_40px_rgba(255,80,0,0.2)] overflow-hidden p-2 sm:p-4">
         
         <!-- Top Pixel HUD Header -->
-        <div class="w-full flex justify-between items-center z-10 text-[9px] sm:text-xs px-2 sm:px-3 py-2 bg-slate-900/90 rounded border-2 border-amber-600/40 gap-1">
+        <div class="w-full flex flex-wrap justify-between items-center z-10 text-[9px] sm:text-xs px-2 sm:px-3 py-2 bg-slate-900/90 rounded border-2 border-amber-600/40 gap-1">
             <div class="flex items-center space-x-2">
                 <button id="pauseBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] sm:text-[10px] text-amber-300 hover:bg-gray-700 rounded">⏸️ PAUSE [P]</button>
                     <div class="flex items-center space-x-1 sm:space-x-2" data-cs-hide>
@@ -1920,10 +1920,10 @@
         }
 
         function openTokenModal(mode) {
-            tokenModalMode = mode;
             tokenTipIndex = 0;
             tokenModalPaused = gameState === 'PLAYING';
             if (tokenModalPaused) togglePause();
+            tokenModalMode = mode;
             document.getElementById('tokenModalTitle').textContent = mode === 'tip' ? 'TOKENS UNLOCKED' : 'YOUR TOKENS';
             document.getElementById('tokenTipText').textContent = mode === 'tip' ? TOKEN_TIP[0] : '';
             document.getElementById('tokenBreakdown').classList.toggle('hidden', mode === 'tip');
@@ -2094,7 +2094,7 @@
                 if (enemy.dead) return;
                 enemy.update(dt, player, projectiles);
 
-                if (player.isAttacking && enemy.lastHitAttackId !== player.attackId) {
+                if (player.isAttacking && enemy.lastHitAttackId !== player.attackId && !(enemy.invulnerableTimer > 0)) {
                     const atkBox = {
                         x: player.facing === 1 ? player.x + player.width : player.x - 22,
                         y: player.y - 4,
@@ -2109,6 +2109,7 @@
                         atkBox.y + atkBox.height > enemy.y
                     ) {
                         enemy.lastHitAttackId = player.attackId;
+                        if (enemy.type === 'frostBoss') enemy.invulnerableTimer = 0.3;
                         enemy.hp -= 20;
                         incrementCombo();
                         audio.playHit();
