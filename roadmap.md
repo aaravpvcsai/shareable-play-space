@@ -9,4 +9,8 @@
 - [x] Add Boofemo dialogue, replay/continue choices, Magma Tokens
 - [x] Add the uploaded mountain background, vertical climb, mountain enemies, animated sun/wind, and lighting
 - [x] Verify entry from Boofemo, climbing, combat, and summit completion
-- [ ] Keep unpublished until requested
+- [x] Do not publish these updates unless requested
+- [x] Extend mountain climb and add a much tougher summit boss
+- [x] Add summit dialogue branches and flawless Frost Token replay rewards
+- [x] Add combined Tokens counter, one-time tip, and token breakdown
+- [x] Verify mountain jump geometry, shared sword combat, dialogue branches, reward conditions, and token controls in controlled preview tests (full unassisted flawless run not tested)
