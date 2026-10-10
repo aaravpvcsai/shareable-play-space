@@ -42,6 +42,17 @@
             transform: translateY(4px);
             box-shadow: 0 2px 0 #440000;
         }
+        :root { --token-bg: #102b36; --token-ink: #d8f8ff; --token-edge: #76d5ed; --token-shade: #060a10; }
+        .token-counter { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; background: var(--token-bg); color: var(--token-ink); border: 2px solid var(--token-edge); padding: 6px; font-size: 8px; max-width: 150px; cursor: pointer; }
+        .token-counter.hidden { display: none; }
+        .token-modal { position: absolute; inset: 0; z-index: 60; background: var(--token-shade); color: var(--token-ink); display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .token-modal.hidden { display: none; }
+        .token-panel { max-width: 560px; width: 100%; border: 3px solid var(--token-edge); background: var(--token-bg); padding: 24px; line-height: 1.9; font-size: 12px; }
+        .token-panel button { border: 2px solid var(--token-edge); padding: 10px 16px; margin-top: 18px; }
+        .token-panel h2 { margin-bottom: 18px; }
+        #tokenBreakdown p { display: flex; justify-content: space-between; gap: 12px; }
+        #dialogueText { overflow-wrap: anywhere; }
+        @media (max-width: 640px) { .token-panel { font-size: 10px; padding: 16px; } }
     </style>
 </head>
 <body class="h-screen w-screen flex flex-col items-center justify-center p-2 crt">
@@ -86,12 +97,20 @@
                 </div>
                 <button id="muteBtn" class="bg-gray-800 border border-amber-500/50 px-1.5 py-1 text-[8px] text-amber-300 hover:bg-gray-700">🔊 MUSIC</button>
             </div>
-            <div id="magmaCounter" class="hidden flex items-center space-x-1 bg-orange-950/80 border border-orange-500/70 px-2 py-1 rounded">
-                <span class="text-orange-400 font-bold glow-orange">🔥 MAGMA TOKENS:</span>
-                <span id="magmaText" class="text-orange-200 font-bold">0</span>
-            </div>
+            <button id="magmaCounter" type="button" aria-label="Token inventory" class="hidden token-counter">
+                <span id="tokenLabel">🔥 MAGMA TOKENS:</span>
+                <span id="magmaText">0</span>
+            </button>
         </div>
 
+        <div id="tokenModal" class="hidden token-modal" role="dialog" aria-modal="true" aria-labelledby="tokenModalTitle">
+            <div class="token-panel">
+                <h2 id="tokenModalTitle">TOKENS</h2>
+                <p id="tokenTipText"></p>
+                <div id="tokenBreakdown" class="hidden"><p><span>🔥 Magma Tokens</span><span id="magmaInventory">0</span></p><p><span>❄ Frost Tokens</span><span id="frostInventory">0</span></p></div>
+                <button id="tokenModalNext" type="button">NEXT ▶</button>
+            </div>
+        </div>
         <!-- Boss HP Bar (Visible on Stage 5) -->
         <div id="bossBarContainer" class="hidden w-full bg-red-950/90 border-2 border-red-600 rounded p-1.5 z-10 my-1 text-center" data-cs-hide>
             <div class="flex justify-between items-center text-[9px] sm:text-xs text-red-400 font-bold mb-1 px-1">
@@ -177,7 +196,7 @@
                     </div>
 
                     <div class="flex w-[60%] sm:w-[58%] h-full flex-col items-start justify-center gap-5 sm:gap-8">
-                        <div class="relative w-full bg-amber-100 text-black font-bold text-lg sm:text-3xl leading-relaxed px-5 py-6 sm:px-10 sm:py-12 border-4 border-amber-600 shadow-[0_0_40px_rgba(255,200,0,0.5)] min-h-[32vh] sm:min-h-[36vh] flex items-center">
+                        <div class="relative w-full bg-amber-100 text-black font-bold text-xs sm:text-lg leading-relaxed px-3 py-4 sm:px-6 sm:py-6 border-4 border-amber-600 shadow-[0_0_40px_rgba(255,200,0,0.5)] min-h-[24vh] max-h-[65vh] overflow-y-auto flex items-center">
                             <span id="dialogueText">“Woah! You did it!”</span>
                             <div class="absolute top-1/2 -left-4 -translate-y-1/2 w-0 h-0 border-y-[14px] sm:border-y-[20px] border-y-transparent border-r-[16px] sm:border-r-[22px] border-r-amber-100"></div>
                         </div>
@@ -424,6 +443,17 @@
         let enemiesKilledThisRun = 0;
         let enemiesSpawnedThisRun = 0;
         let magmaTokens = 0;
+        let frostTokens = 0;
+        let unifiedTokens = false;
+        let tokenTipShown = false;
+        let tokenModalMode = null;
+        let tokenTipIndex = 0;
+        let tokenModalPaused = false;
+        const TOKEN_TIP = [
+            "Your 'Magma Tokens' bar now just says 'Tokens'.",
+            "The number of tokens in total that you earn throughout the rest of your journey will be displayed here.",
+            "You can click on the 'Tokens' bar to see how many of each type of Tokens you have."
+        ];
         const dialogueChoices = document.getElementById('dialogueChoices');
         const choiceReplayBtn = document.getElementById('choiceReplayBtn');
         const choiceContinueBtn = document.getElementById('choiceContinueBtn');
@@ -1602,6 +1632,7 @@
         }
 
         function loadStage(stageNum) {
+            if (stageNum === currentStage) enemiesSpawnedThisRun -= enemies.filter(e => !e.dead).length + (boss && !boss.dead ? 1 : 0);
             currentStage = stageNum;
             platforms = [];
             fireBarriers = [];
@@ -1616,7 +1647,9 @@
             previousKeys = {};
             choiceReplayBtn.textContent = '↻ REPLAY LEVEL';
             choiceContinueBtn.textContent = '▶ NEXT STAGE';
+            choiceContinueBtn.classList.remove('hidden');
             bossBarContainer.classList.add('hidden');
+            bossBarContainer.querySelector('.glow-red').textContent = "👹 DEMON LORD KHAL'GORATH";
             cutsceneOverlay.classList.add('hidden');
             cutscenePhase = 'NONE';
             cutsceneTimer = 0;
@@ -1737,7 +1770,7 @@
             } else if (stageNum === 6) {
                 stageLabel.textContent = 'THE SUNLIT SUMMIT';
                 stageLabel.className = 'text-cyan-300 glow-cyan';
-                lavaHeight = 1000;
+                lavaHeight = MountainLevel.height + 100;
                 MountainLevel.build();
                 audio.startChiptune(6);
             }
@@ -1757,6 +1790,7 @@
         }
 
         function handlePlayerDeath() {
+            tookDamageThisRun = true;
             if (gameState === 'DYING') return;
             gameState = 'DYING';
             stageBannerText.textContent = "YOU DIED!";
@@ -1832,18 +1866,9 @@
         };
 
         function chooseOption(option) {
-            if (currentStage === 6 && MountainLevel.completed) {
-                cutsceneOverlay.classList.add('opacity-0');
-                if (option === 'continue') { startGame(); return; }
-                loadStage(6);
-                gameState = 'PLAYING';
-                lastTime = performance.now();
-                requestAnimationFrame(gameLoop);
-                return;
-            }
             if (!awaitingChoice) return;
-            const line = CHOICE_REPLIES[choiceSet][option];
-            playDialogue([line], option === 'replay' ? replayLevel : continueToNextStage);
+            const reply = currentStage === 6 ? MountainLevel.replies[choiceSet][option] : [CHOICE_REPLIES[choiceSet][option]];
+            playDialogue(reply, option === 'replay' ? replayLevel : continueToNextStage);
         }
 
         function replayLevel() {
@@ -1852,16 +1877,30 @@
             enemiesKilledThisRun = 0;
             enemiesSpawnedThisRun = 0;
             cutsceneOverlay.classList.add('opacity-0');
-            loadStage(1);
+            const replayStage = currentStage === 6 ? 6 : 1;
+            loadStage(replayStage);
             player.fullHeal();
-            audio.startChiptune(1);
             gameState = 'PLAYING';
             lastTime = performance.now();
             requestAnimationFrame(gameLoop);
         }
 
         function continueToNextStage() {
+            if (currentStage === 6) {
+                awaitingChoice = false;
+                dialogueNext.classList.add('hidden');
+                dialogueChoices.classList.remove('hidden');
+                choiceReplayBtn.textContent = '↻ REPLAY MOUNTAIN';
+                choiceContinueBtn.classList.add('hidden');
+                choiceReplayBtn.onclick = null;
+                showChoices(choiceSet);
+                dialogueText.textContent = 'NEXT STAGE COMING SOON...';
+                return;
+            }
             isReplayRun = false;
+            tookDamageThisRun = false;
+            enemiesKilledThisRun = 0;
+            enemiesSpawnedThisRun = 0;
             dialogueLines = [];
             dialogueDone = null;
             cutsceneOverlay.classList.add('opacity-0');
@@ -1872,11 +1911,42 @@
         }
 
         function updateMagmaHUD() {
-            magmaCounter.classList.toggle('hidden', magmaTokens <= 0);
-            magmaText.textContent = magmaTokens;
+            magmaCounter.classList.toggle('hidden', magmaTokens + frostTokens <= 0);
+            document.getElementById('tokenLabel').textContent = unifiedTokens ? 'TOKENS:' : '🔥 MAGMA TOKENS:';
+            magmaText.textContent = unifiedTokens ? magmaTokens + frostTokens : magmaTokens;
+            magmaCounter.setAttribute('aria-label', unifiedTokens ? 'Tokens: view inventory' : 'Magma Tokens');
+            document.getElementById('magmaInventory').textContent = magmaTokens;
+            document.getElementById('frostInventory').textContent = frostTokens;
         }
 
+        function openTokenModal(mode) {
+            tokenModalMode = mode;
+            tokenTipIndex = 0;
+            tokenModalPaused = gameState === 'PLAYING';
+            if (tokenModalPaused) togglePause();
+            document.getElementById('tokenModalTitle').textContent = mode === 'tip' ? 'TOKENS UNLOCKED' : 'YOUR TOKENS';
+            document.getElementById('tokenTipText').textContent = mode === 'tip' ? TOKEN_TIP[0] : '';
+            document.getElementById('tokenBreakdown').classList.toggle('hidden', mode === 'tip');
+            document.getElementById('tokenModalNext').textContent = mode === 'tip' ? 'NEXT ▶' : 'CLOSE';
+            document.getElementById('tokenModal').classList.remove('hidden');
+            document.getElementById('tokenModalNext').focus();
+        }
+        magmaCounter.addEventListener('click', () => { if (unifiedTokens) openTokenModal('inventory'); });
+        document.getElementById('tokenModalNext').addEventListener('click', () => {
+            if (tokenModalMode === 'tip' && ++tokenTipIndex < TOKEN_TIP.length) {
+                document.getElementById('tokenTipText').textContent = TOKEN_TIP[tokenTipIndex];
+                document.getElementById('tokenModalNext').textContent = tokenTipIndex === TOKEN_TIP.length - 1 ? 'GOT IT' : 'NEXT ▶';
+                return;
+            }
+            document.getElementById('tokenModal').classList.add('hidden');
+            tokenModalMode = null;
+            if (tokenModalPaused && gameState === 'PAUSED') togglePause();
+            tokenModalPaused = false;
+            magmaCounter.focus();
+        });
+
         function advanceDialogue() {
+            if (tokenModalMode) return;
             if (cutscenePhase !== 'DIALOGUE' || gameState !== 'VICTORY' || awaitingChoice) return;
             if (!dialogueLines.length) return;
             dialogueIdx++;
@@ -1893,6 +1963,7 @@
         let pausedFrom = 'PLAYING';
 
         function togglePause() {
+            if (tokenModalMode) return;
             if (gameState === 'PLAYING') {
                 pausedFrom = 'PLAYING';
                 gameState = 'PAUSED';
@@ -1983,7 +2054,7 @@
 
             if (currentStage === 6) {
                 cameraX += (Math.max(0, Math.min(240, player.x - V_WIDTH / 2)) - cameraX) * 0.1;
-                cameraY += (Math.max(0, Math.min(450, player.y - V_HEIGHT * 0.6)) - cameraY) * 0.12;
+                cameraY += (Math.max(0, Math.min(MountainLevel.height - V_HEIGHT, player.y - V_HEIGHT * 0.6)) - cameraY) * 0.12;
                 MountainLevel.update();
                 if (gameState !== 'PLAYING') return;
             } else if (cutscenePhase !== 'SHOW_BOOFEMO') {
@@ -2225,6 +2296,7 @@
         }
 
         window.addEventListener('keydown', e => {
+            if (tokenModalMode) return;
             keys[e.code] = true;
             if (['Space', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
 
