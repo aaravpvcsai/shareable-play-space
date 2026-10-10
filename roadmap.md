@@ -10,3 +10,7 @@
 - [x] Add the uploaded mountain background, vertical climb, mountain enemies, animated sun/wind, and lighting
 - [x] Verify entry from Boofemo, climbing, combat, and summit completion
 - [ ] Keep unpublished until requested
+- [ ] Extend mountain climb and add a much tougher summit boss
+- [ ] Add summit dialogue branches and flawless Frost Token replay rewards
+- [ ] Add combined Tokens counter, one-time tip, and token breakdown
+- [ ] Verify mountain combat, dialogue, rewards, and token controls
