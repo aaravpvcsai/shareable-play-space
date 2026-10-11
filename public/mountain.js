@@ -88,7 +88,7 @@ const MountainLevel = {
         drawPixelRect(ctx, p.eye, summit.x + 47, summit.y - 34, 18, 10);
         drawPixelRect(ctx, p.snow, summit.x + 47, summit.y - 34, 18, 2);
         platforms.forEach((platform, i) => {
-            if (i > 0 && i % 12 === 0 && i > this.checkpointIndex) Sprites.drawCheckpointStatue(ctx, platform.x + 15, platform.y - 24, time * 10);
+            if (i > 0 && i % 12 === 0) Sprites.drawCheckpointStatue(ctx, platform.x + 15, platform.y - 24, time * 10);
         });
         ctx.save();
         ctx.fillStyle = p.sun;
@@ -107,6 +107,17 @@ const MountainLevel = {
             this.checkpointIndex = index;
             activeCheckpoint = { stage: 6, x: platforms[index].x + 15, y: platforms[index].y - player.height };
             audio.playHeal();
+        } else if (index <= this.checkpointIndex) {
+            // Touch a statue from any side (not just a perfect landing) to save it.
+            for (let i = Math.max(12, this.checkpointIndex + 12); i < platforms.length; i += 12) {
+                const sx = platforms[i].x + 15, sy = platforms[i].y - 24;
+                if (Math.abs(player.x + player.width / 2 - (sx + 8)) < 26 && Math.abs(player.y + player.height / 2 - (sy + 12)) < 30) {
+                    this.checkpointIndex = i;
+                    activeCheckpoint = { stage: 6, x: sx, y: platforms[i].y - player.height };
+                    audio.playHeal();
+                    break;
+                }
+            }
         }
         if (player.y > cameraY + V_HEIGHT + 80 || player.y > this.height + 20) {
             tookDamageThisRun = true;
